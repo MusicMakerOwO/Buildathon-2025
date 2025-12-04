@@ -1,0 +1,15 @@
+# Database Files
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# IDE files
+.idea/
+.vscode/
+
+# Dependency directories
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
