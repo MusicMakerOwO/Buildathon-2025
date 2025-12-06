@@ -6,18 +6,6 @@ class Item {
 		this.count       = Number(count) || 1;
 	}
 
-	drop(amount) {
-		amount = Number(amount) || 1;
-		if (amount < 1) {
-			throw new RangeError('Drop amount must be at least 1');
-		}
-		if (amount > this.count) {
-			amount = this.count;
-		}
-		this.count -= amount;
-		return this.count;
-	}
-
 	use(target) {
 		throw new Error('Use method not implemented for this item');
 	}
