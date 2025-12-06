@@ -20,3 +20,5 @@ class Obstacle {
 		throw new Error('Interact method not implemented for this obstacle');
 	}
 }
+
+module.exports = Obstacle;

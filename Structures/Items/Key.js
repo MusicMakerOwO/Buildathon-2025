@@ -18,3 +18,5 @@ class Key extends Item {
 		return `You use the ${this.name} to unlock the ${target.name}.`;
 	}
 }
+
+module.exports = Key;

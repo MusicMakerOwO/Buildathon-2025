@@ -26,3 +26,5 @@ class Rock extends Item {
 		return actualDamage;
 	}
 }
+
+module.exports = Rock;
