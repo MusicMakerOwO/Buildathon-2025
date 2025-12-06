@@ -3,17 +3,24 @@ const Entity = require('./Entity');
 const Obstacle = require('./Obstacle');
 const IsClass = require('../Utils/IsClass');
 
-class Room {
-	constructor(description) {
+class RoomController {
+	/**
+	 * @param {string} description
+	 * @param {Obstacle[]} possibleObstacles - array of Obstacle classes to choose from
+	 * @param {Item[]} possibleItems - array of Item classes to choose from
+	 * @param {number} obstacleCount - how many obstacles to place in the room
+	 * @param {number} itemCount - how many items to place in the room
+	 */
+	constructor(description, possibleObstacles, possibleItems, obstacleCount, itemCount) {
 		this.description = String(description);
 		this.items = new Map(); // Item class -> Item instance
 		this.obstacles = new Map(); // Obstacle class -> Obstacle instance
 
 		// Randomly populate automatically on creation
-		this.RandomizeContents();
+		this.RandomizeContents(possibleObstacles, possibleItems, obstacleCount, itemCount);
 	}
 
-	RandomizeContents() {
+	RandomizeContents(possibleObstacles, possibleItems, obstacleCount, itemCount) {
 		// TODO: Select random obstacles and items to populate the room
 		// Be careful that the room remains solvable!
 		// ie a locked door must have a key somewhere
@@ -63,3 +70,5 @@ class Room {
 		return Array.from(actionsSet);
 	}
 }
+
+module.exports = RoomController;
