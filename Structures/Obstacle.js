@@ -1,5 +1,3 @@
-const PlayerController = require('./PlayerController');
-
 // bad name, I know, but "object" is taken in JS
 class Obstacle {
 	constructor(name, lore, actions) {
@@ -10,13 +8,7 @@ class Obstacle {
 		this.availableActions = actions;
 	}
 
-	/**
-	 * Interact with the obstacle using a specified action. This method should be overridden by subclasses to provide specific interaction logic.
-	 * @param {PlayerController} player - The player interacting with the obstacle.
-	 * @param {string} action - The action to perform on the obstacle.
-	 * @returns {string} - The result of the interaction.
-	 */
-	interact(player, action) {
+	interact() {
 		throw new Error('Interact method not implemented for this obstacle');
 	}
 }
