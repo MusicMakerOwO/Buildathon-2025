@@ -8,6 +8,9 @@ class Room {
 		this.description = String(description);
 		this.items = new Map(); // Item class -> Item instance
 		this.obstacles = new Map(); // Obstacle class -> Obstacle instance
+
+		// Randomly populate automatically on creation
+		this.RandomizeContents();
 	}
 
 	RandomizeContents() {
