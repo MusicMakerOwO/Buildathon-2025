@@ -16,3 +16,5 @@ class Stove extends StorageObstacle {
 		);
 	}
 }
+
+module.exports = Stove;
