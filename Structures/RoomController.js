@@ -1,5 +1,4 @@
 const Item = require('./Item');
-const Entity = require('./Entity');
 const Obstacle = require('./Obstacle');
 const IsClass = require('../Utils/IsClass');
 
@@ -12,6 +11,14 @@ class RoomController {
 	 * @param {number} itemCount - how many items to place in the room
 	 */
 	constructor(description, possibleObstacles, possibleItems, obstacleCount, itemCount) {
+
+		for (const obstacleClass of possibleObstacles) {
+			this.#VerifySubclass(obstacleClass, Obstacle);
+		}
+		for (const itemClass of possibleItems) {
+			this.#VerifySubclass(itemClass, Item);
+		}
+
 		this.description = String(description);
 		this.items = new Map(); // Item class -> Item instance
 		this.obstacles = new Map(); // Obstacle class -> Obstacle instance
