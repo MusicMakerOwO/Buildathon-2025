@@ -4,6 +4,7 @@ const IsClass = require('../Utils/IsClass');
 const StorageObstacle = require('./StorageObstacle');
 const Key = require("./Items/Key");
 const Door = require("./GameObjects/Door");
+const PlayerController = require("./PlayerController");
 
 class RoomController {
 	/**
@@ -73,6 +74,61 @@ class RoomController {
 		if (targetClass === baseClass) {
 			throw new Error(`Cannot use base ${baseClass.name} class, must specify a subclass`);
 		}
+	}
+
+	/**
+	 * Handles player interaction with props in the room (items/obstacles/inventory).
+	 * @param {PlayerController} player
+	 * @param {string} action
+	 * @param {string} propString
+	 * @returns {string}
+	 */
+	interact(player, action, propString) {
+		if (!(player instanceof PlayerController)) {
+			throw new TypeError('Player must be an instance of PlayerController');
+		}
+		propString = String(propString).toLowerCase();
+		action = String(action).toLowerCase();
+
+		// Check items on floor first
+		for (const item of this.items.values()) {
+			if (item.name.toLowerCase() === propString) {
+				if (action === 'take' || action === 'grab') {
+					player.addItem(item);
+					this.items.delete(item.constructor);
+					return `You take the ${item.name} and put it in your pocket.`;
+				} else if (action === 'examine') {
+					return `It's a ${item.name}. You can't quite make out the details from here, try grabbing it first.`;
+				} else {
+					return `You can't ${action} the ${item.name}. You can only grab it.`;
+				}
+			}
+		}
+
+		// Next check obstacles
+		for (const obstacle of this.obstacles.values()) {
+			if (obstacle.name.toLowerCase() === propString) {
+				if (obstacle.availableActions.includes(action)) {
+					return obstacle.interact(player, action);
+				} else {
+					return `You can't ${action} the ${obstacle.name}. Available actions are: ${obstacle.availableActions.join(', ')}.`;
+				}
+			}
+		}
+
+		// Then player inventory
+		for (const item of player.inventory.values()) {
+			if (item.name.toLowerCase() === propString) {
+				if (action === 'examine') {
+					return item.lore;
+				} else {
+					return `You can't ${action} the ${item.name} in your inventory. You can only 'examine' it.`;
+				}
+			}
+		}
+
+		// And finally, 404 error
+		return `There is no ${propString} here to interact with.`;
 	}
 
 	listItemsOnFloor() {
