@@ -79,30 +79,6 @@ class PlayerController {
 		return item.count;
 	}
 
-	/**
-	 * Interacts with an obstacle using the specified action.
-	 * Recommended you interact with items here rather than directly calling `Obstacle.interact()` but either work.
-	 * @param {Obstacle} obstacle
-	 * @param {string} action
-	 * @returns {string}
-	 */
-	interactWith(obstacle, action) {
-		if (!(obstacle instanceof Obstacle)) {
-			throw new TypeError('Can only interact with instances of Obstacle');
-		}
-		if (typeof action !== 'string') {
-			throw new TypeError('Action must be a string');
-		}
-		if (!obstacle.availableActions.includes(action)) {
-			throw new Error(`Action "${action}" is not a valid action: ${obstacle.availableActions.join(', ')}`);
-		}
-		return obstacle.interact(this, action);
-	}
-
-	/**
-	 * Lists the contents of the player's inventory in a human-readable format.
-	 * @returns {string}
-	 */
 	listInventory() {
 		if (this.inventory.size === 0) {
 			return 'Your inventory is empty.';
