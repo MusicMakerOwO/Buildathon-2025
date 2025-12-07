@@ -1,12 +1,8 @@
-const Entity = require('./Entity');
 const Item = require('./Item');
-const Obstacle = require('./Obstacle');
 const IsClass = require('../Utils/IsClass');
 
-class PlayerController extends Entity {
-	constructor(name = 'Player', health = 100, defense = 5) {
-		super(name, health, 10, defense, "Hey look, it's you! :D");
-
+class PlayerController {
+	constructor() {
 		this.inventory = new Map(); // Class -> Class instance
 	}
 
