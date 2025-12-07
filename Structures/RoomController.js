@@ -148,8 +148,7 @@ class RoomController {
 		}
 	}
 	listAvailableActions() {
-		const actionsSet = new Set(['use', 'take', 'examine']); // base actions
-		// Use - `use {item} on {obstacle}`
+		const actionsSet = new Set(['grab', 'take', 'examine']); // base actions
 		// Take - `take {item}` (from room's floor)
 		// Examine - `examine {item}` or `examine {obstacle}`
 		for (const obstacle of this.obstacles.values()) {
