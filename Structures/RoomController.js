@@ -3,6 +3,7 @@ const Obstacle = require('./Obstacle');
 const IsClass = require('../Utils/IsClass');
 const StorageObstacle = require('./StorageObstacle');
 const Key = require("./Items/Key");
+const Door = require("./GameObjects/Door");
 
 class RoomController {
 	/**
@@ -17,6 +18,9 @@ class RoomController {
 			this.#VerifySubclass(storageObstacleClass, StorageObstacle);
 		}
 		for (const obstacleClass of obstacles) {
+			if (obstacleClass === Door) {
+				throw new Error('Doors cannot be used as regular obstacles in a room. They will be added for you automatically.');
+			}
 			this.#VerifySubclass(obstacleClass, Obstacle);
 		}
 		for (const itemClass of items) {
