@@ -21,7 +21,7 @@ class PlayerController {
 	/**
 	 * Checks if the player has an item of the specified class in their inventory.
 	 * Returns the quantity if found, otherwise returns false.
-	 * @param itemClass
+	 * @param {Item} itemClass
 	 * @returns {number|false}
 	 */
 	hasItem(itemClass) {
@@ -36,7 +36,7 @@ class PlayerController {
 	 * Adds an item to the player's inventory.
 	 * If the item type already exists, increments the count.
 	 * Returns the new count of the item type.
-	 * @param item
+	 * @param {Item} item
 	 * @returns {number}
 	 */
 	addItem(item) {
@@ -55,8 +55,8 @@ class PlayerController {
 	 * Removes a specified amount of an item type from the player's inventory.
 	 * Throws an error if not enough items are present.
 	 * Returns the new count of the item type after removal.
-	 * @param itemClass
-	 * @param amount
+	 * @param {Item} itemClass
+	 * @param {number?} amount
 	 * @return {number}
 	 */
 	removeItem(itemClass, amount = 1) {
