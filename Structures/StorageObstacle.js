@@ -9,7 +9,7 @@ class StorageObstacle extends Obstacle {
 	 * @param {string} lore
 	 * @param {boolean} isLocked
 	 * @param {Item[]} contents
-	 * @param {string[]} additionActions
+	 * @param {string[]?} additionActions
 	 */
 	constructor(name, lore, isLocked, contents, additionActions) {
 		for (const item of contents) {
@@ -61,3 +61,5 @@ class StorageObstacle extends Obstacle {
 		}
 	}
 }
+
+module.exports = StorageObstacle;
