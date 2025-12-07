@@ -8,13 +8,13 @@ const RANDOM_DESCRIPTIONS = [
 	'A vintage desk cluttered with typewritten pages, ink pens, and a small desk lamp. It has an air of nostalgia about it.',
 ];
 
-class ClutteredDesk extends Obstacle {
+class Desk extends Obstacle {
 	constructor() {
 		super(
-			'Cluttered Desk',
+			'Desk',
 			RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * RANDOM_DESCRIPTIONS.length) ],
 		);
 	}
 }
 
-module.exports = ClutteredDesk;
+module.exports = Desk;
