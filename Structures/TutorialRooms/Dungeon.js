@@ -13,9 +13,7 @@ A single flickering lantern hangs from a rusty chain in the center of the room, 
 In one corner, you notice a narrow crack in the wall, just wide enough to fit your hand inside.
 `,
 			[Lantern, Crack],
-			[Key],
-			2,
-			1,
+			[Key]
 		);
 	}
 }
