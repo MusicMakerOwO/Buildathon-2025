@@ -126,3 +126,5 @@ class GameController {
 }
 
 module.exports = GameController;
+
+module.exports.THEMES = THEMES;
