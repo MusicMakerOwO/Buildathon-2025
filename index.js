@@ -1,5 +1,7 @@
 const preloadStart = process.hrtime.bigint();
 
+const {Log} = require('./Utils/Log');
+
 const config = require('./config.json');
 
 const ConfigTemplate = {
@@ -29,10 +31,10 @@ for (const [key, type] of Object.entries(ConfigTemplate)) {
 	}
 }
 
+const { resolve } = require('node:path');
 const { existsSync, readFileSync } = require('node:fs');
 const { writeFile, lstat } = require('node:fs/promises');
 
-const {Log} = require('./Utils/Log');
 const ComponentLoader = require('./Utils/ComponentLoader');
 const EventLoader = require('./Utils/EventLoader');
 const RegisterCommands = require('./Utils/RegisterCommands');
@@ -68,6 +70,9 @@ client.buttons = new Map();
 client.menus = new Map();
 client.modals = new Map();
 client.messages = new Map();
+
+// TODO: Should be a TTL cache in case someone doesn't finish their dungeon
+client.dungeons = new Map(); // number -> GameController instance
 
 // file path : [component type, component cache]
 const COMPONENT_FOLDERS = {
@@ -147,7 +152,7 @@ function ResetEvents(path) {
 	client.removeAllListeners();
 	EventLoader(client, path);
 	let ListenerCount = 0;
-	for (const listeners of Object.values(client._events)) {
+	for (const listeners of Object.values(client['_events'])) {
 		ListenerCount += listeners.length;
 	}
 	Log('DEBUG', `Loaded ${ListenerCount} events`);
@@ -201,7 +206,7 @@ async function HotReload(cache, componentFolder, filePath, type = 0) {
 	const newComponent = require(filePath);
 
 	// Check by reference, not by cache contents
-	if (cache == client.commands) {
+	if (cache === client.commands) {
 		const oldCommandData = oldComponent.data?.toJSON() ?? {};
 		const newCommandData = newComponent.data?.toJSON() ?? {};
 		if (JSON.stringify(oldCommandData) !== JSON.stringify(newCommandData)) {
@@ -277,7 +282,7 @@ async function Shutdown() {
 process.on('SIGINT', Shutdown); // ctrl+c
 process.on('SIGTERM', Shutdown); // docker stop
 
-// ctrl+z is not a graceful shutdown, it's a pause but we don't want to pause lol
+// ctrl+z is not a graceful shutdown, it's a pause, but we don't want to pause lol
 process.on('SIGTSTP', Shutdown);
 
 // standard uncaught errors
