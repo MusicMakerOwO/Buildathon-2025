@@ -1,5 +1,7 @@
 const PrisonCell = require("./Rooms/PrisonCell");
 const DungeonTutorial = require("./TutorialRooms/Dungeon");
+const PlayerController = require("./PlayerController");
+const Door = require("./GameObjects/Door");
 
 const THEMES = {
 	Dungeon: 'dungeon',
@@ -53,6 +55,73 @@ class GameController {
 			const RoomClass = this.possibleRooms[Math.floor(Math.random() * this.possibleRooms.length)];
 			this.rooms[i] = new RoomClass();
 		}
+
+		// room boundaries, N-1 doors for N rooms
+		this.doors = new Array(roomCount).fill(null).map( () => new Door() );
+
+		// inventory management
+		this.player = new PlayerController();
+
+		this.currentRoomIndex = 0;
+	}
+
+	/**
+	 * @returns {RoomController}
+	 */
+	get currentRoom() {
+		return this.rooms[this.currentRoomIndex];
+	}
+
+	/**
+	 * Returns a `Door` instance or `null` if last room
+	 * @returns {Door|null}
+	 */
+	get currentRoomBoundary() {
+		if (this.currentRoomIndex >= this.rooms.length - 1) {
+			return null; // no boundary after last room
+		}
+		return this.doors[this.currentRoomIndex];
+	}
+
+	canMoveToNextRoom() {
+		const door = this.currentRoomBoundary;
+		if (!door) return false; // no next room
+		return !door.isLocked;
+	}
+
+	moveToNextRoom() {
+		if (!this.canMoveToNextRoom()) {
+			throw new Error('Cannot move to next room, door is locked or no next room exists');
+		}
+		this.currentRoomIndex++;
+	}
+
+	/**
+	 * Handles player interaction within the game.
+	 * @param {string} action
+	 * @param {string} propString
+	 */
+	handleInteraction(action, propString) {
+		if (action.toLowerCase() === 'inventory') {
+			return this.player.listInventory();
+		}
+
+		// door interactions take priority over everything else in the room
+		if (propString.toLowerCase() === 'door') {
+			const door = this.currentRoomBoundary;
+			if (!door) {
+				return 'There is no door here.';
+			}
+			const response = door.interact(this.player, action);
+			if (!door.isLocked && action.toLowerCase() === 'open') {
+				this.moveToNextRoom();
+				return response + '\n\nYou move to the next room.\n\n' + this.currentRoom.description;
+			} else {
+				return response;
+			}
+		}
+
+		return this.currentRoom.interact(this.player, action, propString);
 	}
 }
 
