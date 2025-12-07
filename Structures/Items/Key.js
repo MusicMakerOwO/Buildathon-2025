@@ -1,4 +1,5 @@
 const Item = require('../Item');
+const Door = require("../GameObjects/Door");
 
 class Key extends Item {
 	constructor() {
