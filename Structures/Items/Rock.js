@@ -1,6 +1,4 @@
 const Item = require('../Item');
-const Entity = require('../Entity');
-const RandomInt = require('../../Utils/RandomInt');
 
 class Rock extends Item {
 	constructor() {
