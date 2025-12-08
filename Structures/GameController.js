@@ -63,11 +63,17 @@ class GameController {
 		this.player = new PlayerController();
 
 		this.currentRoomIndex = 0;
+
+		this.logs = [];
 	}
 
 	/**
 	 * @returns {RoomController}
 	 */
+	addLog(entry) {
+		const lineNumber = this.logs.length + 1;
+		this.logs.push(`${lineNumber.toString().padStart(3)}: ${entry}`);
+	}
 	get currentRoom() {
 		return this.rooms[this.currentRoomIndex];
 	}
@@ -103,25 +109,33 @@ class GameController {
 	 */
 	handleInteraction(action, propString) {
 		if (action.toLowerCase() === 'inventory') {
-			return this.player.listInventory();
+			this.addLog('You check your inventory.');
+			this.addLog(this.player.listInventory());
+			return;
 		}
+
+		this.addLog(`You attempt to ${action} the ${propString}.`);
 
 		// door interactions take priority over everything else in the room
 		if (propString.toLowerCase() === 'door') {
 			const door = this.currentRoomBoundary;
 			if (!door) {
-				return 'There is no door here.';
+				this.addLog('There is no door here.');
+				return;
 			}
 			const response = door.interact(this.player, action);
 			if (!door.isLocked && action.toLowerCase() === 'open') {
 				this.moveToNextRoom();
-				return response + '\n\nYou move to the next room.\n\n' + this.currentRoom.description;
+				this.addLog(response);
+				this.addLog('[ You move to the next room ]');
+				this.addLog(this.currentRoom.description);
 			} else {
-				return response;
+				this.addLog(response);
 			}
+			return;
 		}
 
-		return this.currentRoom.interact(this.player, action, propString);
+		this.addLog(this.currentRoom.interact(this.player, action, propString));
 	}
 }
 
