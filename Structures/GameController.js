@@ -64,16 +64,17 @@ class GameController {
 
 		this.currentRoomIndex = 0;
 
+		/** @type {string[]} */
 		this.logs = [];
 	}
 
-	/**
-	 * @returns {RoomController}
-	 */
+	/** @param {string} entry */
 	addLog(entry) {
 		const lineNumber = this.logs.length + 1;
 		this.logs.push(`${lineNumber.toString().padStart(3)}: ${entry}`);
 	}
+
+	/** @returns {RoomController} */
 	get currentRoom() {
 		return this.rooms[this.currentRoomIndex];
 	}
@@ -89,6 +90,7 @@ class GameController {
 		return this.doors[this.currentRoomIndex];
 	}
 
+	/** @returns {boolean} */
 	canMoveToNextRoom() {
 		const door = this.currentRoomBoundary;
 		if (!door) return false; // no next room
@@ -103,7 +105,9 @@ class GameController {
 	}
 
 	/**
-	 * Handles player interaction within the game.
+	 * Handles player interaction with props in the current room.
+	 * All outputs are written to `GameController.logs`.
+	 * This function returns nothing, you are expected to read from the logs after each interaction.
 	 * @param {string} action
 	 * @param {string} propString
 	 */
