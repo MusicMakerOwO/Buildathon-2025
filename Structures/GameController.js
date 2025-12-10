@@ -7,7 +7,6 @@ const THEMES = {
 	Dungeon: 'dungeon',
 	HauntedHouse: 'haunted_house',
 	AbandonedLab: 'abandoned_lab',
-	MedievalCastle: 'medieval_castle',
 	SnowyCabin: 'snowy_cabin'
 }
 
@@ -15,7 +14,6 @@ const TUTORIAL_ROOMS_BY_THEME = {
 	[THEMES.Dungeon]: DungeonTutorial,
 	[THEMES.HauntedHouse]: null, // coming soon
 	[THEMES.AbandonedLab]: null,
-	[THEMES.MedievalCastle]: null,
 	[THEMES.SnowyCabin]: null
 }
 
@@ -28,9 +26,6 @@ const ROOMS_BY_THEME = {
 	],
 	[THEMES.AbandonedLab]: [
 		// Add Abandoned Lab rooms here
-	],
-	[THEMES.MedievalCastle]: [
-		// Add Medieval Castle rooms here
 	],
 	[THEMES.SnowyCabin]: [
 		// Add Snowy Cabin rooms here
