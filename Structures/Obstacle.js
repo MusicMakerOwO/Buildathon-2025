@@ -4,12 +4,12 @@ const { Log } = require("../Utils/Log");
 class Obstacle {
 	/**
 	 * @param {string} name
-	 * @param {string} lore
+	 * @param {string} description
 	 * @param {string[]?} additionalActions
 	 */
-	constructor(name, lore, additionalActions) {
+	constructor(name, description, additionalActions) {
 		this.name = String(name);
-		this.lore = String(lore || 'An immovable obstacle blocks your path.');
+		this.description = String(description || 'An immovable obstacle blocks your path.');
 
 		const actionsSet = new Set( ['examine'].concat(additionalActions || []) );
 		this.availableActions = Array.from(actionsSet);
@@ -22,7 +22,7 @@ class Obstacle {
 	 */
 	interact(player, action) {
 		if (action === 'examine') {
-			return this.lore;
+			return this.description;
 		}
 
 		// default unhandled action

@@ -6,12 +6,12 @@ const PlayerController = require('./PlayerController');
 class StorageObstacle extends Obstacle {
 	/**
 	 * @param {string} name
-	 * @param {string} lore
+	 * @param {string} description
 	 * @param {boolean} isLocked
 	 * @param {Item[]} contents
 	 * @param {string[]?} additionActions
 	 */
-	constructor(name, lore, isLocked, contents, additionActions) {
+	constructor(name, description, isLocked, contents, additionActions) {
 		for (const item of contents) {
 			if (!(item instanceof Item)) {
 				throw new TypeError('All contents must be instances of Item');
@@ -20,7 +20,7 @@ class StorageObstacle extends Obstacle {
 
 		super(
 			name,
-			lore,
+			description,
 			(
 				contents.length > 0 ? ['unlock', 'open'] : []
 			).concat(additionActions || [])

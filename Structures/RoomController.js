@@ -120,7 +120,7 @@ class RoomController {
 		for (const item of player.inventory.values()) {
 			if (item.name.toLowerCase() === propString) {
 				if (action === 'examine') {
-					return item.lore;
+					return item.description;
 				} else {
 					return `You can't ${action} the ${item.name} in your inventory. You can only 'examine' it.`;
 				}
