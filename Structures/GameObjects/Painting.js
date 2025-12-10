@@ -1,5 +1,4 @@
 const Obstacle = require('../Obstacle');
-const PlayerController = require('../PlayerController');
 const RandomInt = require('../../Utils/RandomInt');
 
 const PAINTING_DESCRIPTIONS = [
@@ -27,15 +26,6 @@ class Painting extends Obstacle {
 			PAINTING_DESCRIPTIONS[ RandomInt(0, PAINTING_DESCRIPTIONS.length - 1) ],
 			['examine']
 		);
-	}
-
-	interact(player, action) {
-		if (!(player instanceof PlayerController)) {
-			throw new TypeError('Player must be an instance of PlayerController');
-		}
-		if (action === 'examine') {
-			return this.lore;
-		}
 	}
 }
 
