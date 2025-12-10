@@ -1,18 +1,10 @@
-const StorageObstacle = require('../StorageObstacle');
+const Obstacle = require("../Obstacle");
 
-class Bookshelf extends StorageObstacle {
-	/**
-	 * @param {boolean} isLocked
-	 * @param {Item[]} contents
-	 */
-	constructor(isLocked, contents) {
+class Bookshelf extends Obstacle {
+	constructor() {
 		super(
 			'Bookshelf',
-			contents.length > 0
-				? 'A tall wooden bookshelf filled with dusty old books. You notice a drawer at the bottom that seems to be part of the bookshelf.'
-				: 'A tall wooden bookshelf filled with dusty old books.',
-			isLocked,
-			contents
+			'A tall wooden bookshelf filled with dusty old books.'
 		);
 	}
 }
