@@ -1,6 +1,6 @@
 const StorageObstacle = require('../StorageObstacle');
 
-class Stove extends StorageObstacle {
+class WoodStove extends StorageObstacle {
 	/**
 	 * The stove is always unlocked, items are still optional.
 	 * @param {false} isLocked
@@ -9,12 +9,12 @@ class Stove extends StorageObstacle {
 	constructor(isLocked, contents) {
 		isLocked = false;
 		super(
-			'Stove',
-			'An old-fashioned stove with a small oven compartment below the burners.',
+			'Wood Stove',
+			'An old-fashioned wood stove with a small oven compartment below the burners.',
 			isLocked,
 			contents
 		);
 	}
 }
 
-module.exports = Stove;
+module.exports = WoodStove;
