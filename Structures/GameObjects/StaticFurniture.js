@@ -13,6 +13,18 @@ const FURNITURE_OPTIONS = [
 	[
 		'Table',
 		'A sturdy wooden table, scarred from years of use but still solid.'
+	],
+	[
+		'Coffee Table',
+		'A low coffee table with a glass top, surrounded by a few scattered magazines.'
+	],
+	[
+		'Lamp',
+		'A tall floor lamp with a decorative shade, casting a warm glow in the room.'
+	],
+	[
+		'Rug',
+		'A large, ornate rug with intricate patterns and vibrant colors, adding warmth to the floor.'
 	]
 ]
 
