@@ -127,6 +127,7 @@ class GameController {
 				this.addLog('There is no door here.');
 				return;
 			}
+			// the door mutates it's internal state (only isLocked flag) when unlocking
 			const response = door.interact(this.player, action);
 			if (!door.isLocked && action.toLowerCase() === 'open') {
 				this.moveToNextRoom();
