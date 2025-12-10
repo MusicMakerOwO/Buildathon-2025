@@ -3,47 +3,43 @@ const PlayerController = require('../PlayerController');
 const Key = require("../Items/Key");
 
 class Door extends Obstacle {
-	constructor(name, lore, isLocked) {
+	constructor() {
 		super(
-			name,
-			lore,
-			['examine', 'open', 'unlock']
+			'Door',
+			'A sturdy wooden door with iron hinges. It looks like it can be locked or unlocked.',
+			['open', 'unlock']
 		);
-		this.isLocked = Boolean(isLocked);
+		this.isLocked = true;
 	}
 
-	/**
-	 * @param {PlayerController} player
-	 * @param {string} action
-	 * @returns {string}
-	 */
 	interact(player, action) {
 		if (!(player instanceof PlayerController)) {
 			throw new TypeError('Player must be an instance of PlayerController');
 		}
-		if (action === 'examine') {
-			return this.lore + (this.isLocked ? ' The door is locked.' : ' The door is unlocked.');
-		}
+
 		if (action === 'open') {
 			if (this.isLocked) {
-				return `The ${this.name} is locked. You must unlock it first.`;
+				return `The door is locked. You must unlock it first.`;
 			} else {
-				return `You open the ${this.name} and pass through.`;
+				return `You open the door and pass through.`;
 			}
 		}
+
 		if (action === 'unlock') {
 			if (!this.isLocked) {
-				return `The ${this.name} is already unlocked. You can open it.`;
+				return `The door is already unlocked. You can open it.`;
 			} else {
-				if (player.hasItem(Key) !== false) {
+				if (player.hasItem(Key)) {
+					player.removeItem(Key, 1);
 					this.isLocked = false;
-					this.availableActions = this.availableActions.filter(act => act !== 'unlock').concat('open');
-					return `You use a key to unlock the ${this.name}. You hear a loud click and can now open it.`;
+					return `You use a key to unlock the door. You hear a loud click and can now open it.`;
 				} else {
-					return `You need a key to unlock the ${this.name}.`;
+					return `You need a key to unlock the door.`;
 				}
 			}
 		}
+
+		return super.interact(player, action);
 	}
 }
 
