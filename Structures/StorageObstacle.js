@@ -22,7 +22,7 @@ class StorageObstacle extends Obstacle {
 			name,
 			lore,
 			(
-				contents.length > 0 ? ['examine', 'unlock', 'open'] : ['examine']
+				contents.length > 0 ? ['unlock', 'open'] : []
 			).concat(additionActions || [])
 		);
 
@@ -34,9 +34,7 @@ class StorageObstacle extends Obstacle {
 		if (!(player instanceof PlayerController)) {
 			throw new TypeError('Player must be an instance of PlayerController');
 		}
-		if (action === 'examine') {
-			return this.lore;
-		}
+
 		if (action === 'open') {
 			if (this.contents.length === 0) {
 				return `You try to open the ${this.name}, but find nothing of interest.`;
@@ -51,6 +49,7 @@ class StorageObstacle extends Obstacle {
 				}
 			}
 		}
+
 		if (action === 'unlock') {
 			if (player.hasItem(Key) !== false) {
 				player.removeItem(Key, 1);
@@ -59,6 +58,9 @@ class StorageObstacle extends Obstacle {
 				return `You need a key to unlock the ${this.name}.`;
 			}
 		}
+
+		// handles base actions, error if action not recognized
+		return super.interact(player, action);
 	}
 }
 
