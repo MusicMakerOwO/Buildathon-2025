@@ -1,6 +1,6 @@
 const Obstacle = require("../Obstacle");
 
-/** @type {[name, description]} */
+/** @type {[name: string, description: string][]} */
 const FURNITURE_OPTIONS = [
 	[
 		'Couch',

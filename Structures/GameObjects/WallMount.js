@@ -1,6 +1,6 @@
 const Obstacle = require("../Obstacle");
 
-/** @type {[name, description]} */
+/** @type {[name: string, description: string][]} */
 const WALL_MOUNT_OPTIONS = [
 	[
 		'Mounted Deer Head',
