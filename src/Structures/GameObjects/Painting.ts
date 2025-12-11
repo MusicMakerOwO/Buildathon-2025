@@ -1,4 +1,4 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 const PAINTING_DESCRIPTIONS = [
 	"An old painting of a serene landscape. It looks slightly crooked on the wall.",
@@ -23,6 +23,8 @@ export class Painting extends Obstacle {
 		super(
 			'Painting',
 			PAINTING_DESCRIPTIONS[ Math.floor(Math.random() * PAINTING_DESCRIPTIONS.length) ],
+			ObstaclePositions.WALL,
+			'hanging on the wall at a slight angle'
 		);
 	}
 }

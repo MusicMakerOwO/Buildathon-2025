@@ -1,16 +1,19 @@
 import {Item} from "./Item";
-import {Obstacle} from "./Obstacle";
+import {Obstacle, ObstaclePositions} from "./Obstacle";
 import {PlayerController} from "./PlayerController";
 import {Key} from "./Items/Key";
+import {ObjectValues} from "../Typings/Helpers";
 
 export class StorageObstacle extends Obstacle {
 	contents: Item[];
 	isLocked: boolean;
 
-	constructor(name: string, description: string, isLocked: boolean, contents: Item[], additionActions?: string[]) {
+	constructor(name: string, description: string, position: ObjectValues<typeof ObstaclePositions>, placementDescription: string, isLocked: boolean, contents: Item[], additionActions?: string[]) {
 		super(
 			name,
 			description,
+			position,
+			placementDescription,
 			(
 				contents.length > 0 ? ['unlock', 'open'] : []
 			).concat(additionActions || [])

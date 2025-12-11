@@ -1,5 +1,6 @@
 import {Item} from "../Item";
 import {StorageObstacle} from "../StorageObstacle";
+import {ObstaclePositions} from "../Obstacle";
 
 const FURNITURE_OPTIONS: [name: string, description: string][] = [
 	[
@@ -30,6 +31,8 @@ export class StorageFurniture extends StorageObstacle {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			... FURNITURE_OPTIONS[ Math.floor(Math.random() * FURNITURE_OPTIONS.length) ],
+			ObstaclePositions.WALL,
+			'positioned against the wall',
 			isLocked,
 			contents
 		);

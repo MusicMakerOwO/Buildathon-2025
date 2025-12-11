@@ -1,10 +1,12 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 export class IronBars extends Obstacle {
 	constructor() {
 		super(
 			'Iron Bars',
-			'Thick iron bars block your way. They are cold and slightly rusted.'
+			'A set of sturdy iron bars, cold to the touch and unyielding.',
+			ObstaclePositions.WALL,
+			'embedded in the wall'
 		);
 	}
 }

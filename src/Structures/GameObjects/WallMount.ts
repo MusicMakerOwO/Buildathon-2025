@@ -1,4 +1,4 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 const WALL_MOUNT_OPTIONS: [name: string, description: string][] = [
 	[
@@ -26,7 +26,9 @@ const WALL_MOUNT_OPTIONS: [name: string, description: string][] = [
 export class WallMount extends Obstacle {
 	constructor() {
 		super(
-			... WALL_MOUNT_OPTIONS[ Math.floor(Math.random() * WALL_MOUNT_OPTIONS.length) ]
+			... WALL_MOUNT_OPTIONS[ Math.floor(Math.random() * WALL_MOUNT_OPTIONS.length) ],
+			ObstaclePositions.WALL,
+			'hanging on the wall'
 		);
 	}
 }

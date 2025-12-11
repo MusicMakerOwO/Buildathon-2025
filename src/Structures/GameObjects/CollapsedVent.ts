@@ -1,10 +1,12 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 export class CollapsedVent extends Obstacle {
 	constructor() {
 		super(
 			'Collapsed Vent',
-			'A ventilation shaft that has caved in, scattering dust and twisted metal.'
+			'A ventilation shaft that has caved in, scattering dust and twisted metal.',
+			ObstaclePositions.FLOOR,
+			'lying near the floor'
 		);
 	}
 }

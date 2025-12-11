@@ -1,10 +1,12 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 export class SnowdriftBlockage extends Obstacle {
 	constructor() {
 		super(
 			'Snowdrift Blockage',
-			'A mound of packed snow blocking part of the room. Cold air seeps through a nearby window making the snow hard and icy.'
+			'A mound of packed snow blocking part of the room. Cold air seeps through a nearby window making the snow hard and icy.',
+			ObstaclePositions.ROOM,
+			'piled high along one side of the room'
 		);
 	}
 }

@@ -1,10 +1,12 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 export class BrokenTestTubes extends Obstacle {
 	constructor() {
 		super(
 			'Broken Test Tubes',
-			'Shattered glass litters the floor. Chemical residue stains the surface.'
+			'Shattered glass litters the floor. Chemical residue stains the surface.',
+			ObstaclePositions.FLOOR,
+			'scattered across the floor'
 		);
 	}
 }

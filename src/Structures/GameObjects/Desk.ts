@@ -1,4 +1,4 @@
-import {Obstacle} from '../Obstacle';
+import {Obstacle, ObstaclePositions} from '../Obstacle';
 
 const RANDOM_DESCRIPTIONS = [
 	'A wooden desk covered in various papers, books, and miscellaneous items. It looks like someone has been using it recently.',
@@ -13,6 +13,8 @@ export class Desk extends Obstacle {
 		super(
 			'Desk',
 			RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * RANDOM_DESCRIPTIONS.length) ],
+			ObstaclePositions.FLOOR,
+			'pushed up against the wall'
 		);
 	}
 }
