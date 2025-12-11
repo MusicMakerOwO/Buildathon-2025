@@ -1,4 +1,9 @@
-import {ButtonInteraction, CommandInteraction, Interaction, SlashCommandBuilder} from "discord.js";
+import {
+	ButtonInteraction,
+	ChatInputCommandInteraction,
+	Interaction,
+	SlashCommandBuilder
+} from "discord.js";
 import {IClient} from "../Client";
 import {ObjectValues} from "./Helpers";
 import {Events} from "../Utils/DiscordConstants";
@@ -6,23 +11,23 @@ import {Events} from "../Utils/DiscordConstants";
 export interface CommandHandler {
 	data: SlashCommandBuilder;
 	aliases?: string[];
-	autocomplete?: (interaction: CommandInteraction, client: IClient) => Promise<any>;
-	execute: (interaction: CommandInteraction, client: IClient) => Promise<any>;
+	autocomplete?: (interaction: ChatInputCommandInteraction, client: IClient) => Promise<any>;
+	execute: (interaction: ChatInputCommandInteraction, client: IClient) => Promise<any>;
 }
 
 export interface ButtonHandler {
 	customID: string;
-	execute: (interaction: ButtonInteraction, args: string[]) => Promise<any>;
+	execute: (interaction: ButtonInteraction, client: IClient, args: string[]) => Promise<any>;
 }
 
 export interface SelectMenuHandler {
 	customID: string;
-	execute: (interaction: Interaction, args: string[]) => Promise<any>;
+	execute: (interaction: Interaction, client: IClient, args: string[]) => Promise<any>;
 }
 
 export interface ModalHandler {
 	customID: string;
-	execute: (interaction: Interaction, args: string[]) => Promise<any>;
+	execute: (interaction: Interaction, client: IClient, args: string[]) => Promise<any>;
 }
 
 export interface EventHandler {
