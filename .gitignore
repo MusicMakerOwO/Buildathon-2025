@@ -3,6 +3,10 @@
 *.sqlite-shm
 *.sqlite-wal
 
+# TypeScript files
+*.tsbuildinfo
+build/
+
 # IDE files
 .idea/
 .vscode/
