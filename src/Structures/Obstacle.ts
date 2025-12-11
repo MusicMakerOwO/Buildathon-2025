@@ -15,7 +15,7 @@ export class Obstacle {
 
 	name: string;
 	description: string;
-	position: number;
+	position: ObjectValues<typeof ObstaclePositions>;
 	placementDescription: string;
 	availableActions: string[];
 
