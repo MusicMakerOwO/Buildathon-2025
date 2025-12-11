@@ -69,8 +69,9 @@ export class GameController {
 
 		this.currentRoomIndex = 0;
 
-		/** @type {string[]} */
 		this.logs = [];
+
+		this.addLog(this.currentRoom.description);
 	}
 
 	addLog(entry: string) {
