@@ -1,5 +1,7 @@
 const preloadStart = process.hrtime.bigint();
 
+import 'source-map-support/register'; // Enable source maps for better error stack traces
+
 import { existsSync } from 'node:fs';
 
 import config from './config';
