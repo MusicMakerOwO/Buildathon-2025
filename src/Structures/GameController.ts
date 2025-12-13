@@ -153,4 +153,59 @@ export class GameController {
 
 		this.addLog( this.currentRoom.interact(this.player, action, propString) );
 	}
+
+	listAvailableActions() {
+		if (this.currentRoom === null) return [];
+		if (this.gameOver) return [];
+
+		const actions = this.currentRoom.listAvailableActions();
+		const door = this.currentRoomBoundary;
+		if (door) {
+			for (const act of door.availableActions) {
+				if (!actions.includes(act)) {
+					actions.push(act);
+				}
+			}
+		}
+		return actions;
+	}
+
+	listObstacles() {
+		if (this.currentRoom === null) return [];
+		if (this.gameOver) return [];
+
+		const obstacles = this.currentRoom.listObstacles();
+		const door = this.currentRoomBoundary;
+		if (door) {
+			obstacles.push(door.name);
+		}
+		return obstacles;
+	}
+
+	getObstaclesForAction(action: string) {
+		if (this.currentRoom === null) return [];
+		if (this.gameOver) return [];
+
+		const obstacles = this.currentRoom.getObstaclesForAction(action);
+		const door = this.currentRoomBoundary;
+		if (door && door.availableActions.includes(action)) {
+			obstacles.push(door);
+		}
+		return obstacles;
+	}
+	getActionsForObstacle(obstacleName: string) {
+		if (this.currentRoom === null) return [];
+		if (this.gameOver) return [];
+
+		const actions = this.currentRoom.getActionsForObstacle(obstacleName);
+		const door = this.currentRoomBoundary;
+		if (door && door.name.toLowerCase() === obstacleName.toLowerCase()) {
+			for (const act of door.availableActions) {
+				if (!actions.includes(act)) {
+					actions.push(act);
+				}
+			}
+		}
+		return actions;
+	}
 }
