@@ -55,9 +55,15 @@ export class GameController {
 		this.rooms = new Array(roomCount + 1).fill(null);
 		// first room is always the tutorial room
 		this.rooms[0] = new tutorialRoomClass();
-		for (let i = 1; i < roomCount; i++) {
-			const RoomClass = this.possibleRooms[Math.floor(Math.random() * this.possibleRooms.length)];
-			this.rooms[i] = new RoomClass();
+
+		// prevent consecutive rooms from being the same
+		for (let i = 1; i < this.rooms.length; i++) {
+			let SelectedRoomClass: Class<RoomController>;
+			do {
+				const randomIndex = Math.floor(Math.random() * this.possibleRooms.length);
+				SelectedRoomClass = this.possibleRooms[randomIndex];
+			} while ( this.rooms[i - 1]?.constructor === SelectedRoomClass );
+			this.rooms[i] = new SelectedRoomClass();
 		}
 
 		// room boundaries, N-1 doors for N rooms
