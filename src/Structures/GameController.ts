@@ -1,9 +1,10 @@
 import {Dungeon} from "./TutorialRooms/Dungeon";
 import {Class, ObjectValues} from "../Typings/Helpers";
 import {RoomController} from "./RoomController";
-import {PrisonCell} from "./Rooms/PrisonCell";
 import {Door} from "./GameObjects/Door";
 import {PlayerController} from "./PlayerController";
+import {MessHall} from "./Rooms/Dungeon/MessHall";
+import {TortureChamber} from "./Rooms/Dungeon/TortureChamber";
 
 export const THEMES = {
 	Dungeon: 'dungeon',
@@ -21,16 +22,14 @@ const TUTORIAL_ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Class<RoomCon
 
 const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<RoomController>>> = {
 	[THEMES.Dungeon]: [
-		PrisonCell
+		TortureChamber,
+		MessHall,
 	],
 	[THEMES.HauntedHouse]: [
-		// Add Haunted House rooms here
 	],
 	[THEMES.AbandonedLab]: [
-		// Add Abandoned Lab rooms here
 	],
 	[THEMES.SnowyCabin]: [
-		// Add Snowy Cabin rooms here
 	]
 }
 
