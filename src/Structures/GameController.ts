@@ -76,16 +76,21 @@ export class GameController {
 
 		this.logs = [];
 
-		this.addLog(this.currentRoom.description);
+		this.gameOver = false;
+
+		this.addLog(this.currentRoom!.description);
+	}
+
+	addBlankLog() {
+		this.logs.push(''); // blank line
 	}
 
 	addLog(entry: string) {
-		const lineNumber = this.logs.length + 1;
-		this.logs.push(`${lineNumber.toString().padStart(3)}: ${entry}`);
+		this.logs.push(entry);
 	}
 
-	get currentRoom() {
-		return this.rooms[this.currentRoomIndex];
+	get currentRoom(): RoomController | null {
+		return this.rooms[this.currentRoomIndex] ?? null;
 	}
 
 	/**
