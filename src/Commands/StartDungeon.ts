@@ -12,7 +12,7 @@ export default {
 		.setDescription('The theme of your dungeon adventure')
 		.setRequired(true)
 		.addChoices([
-			{ name: 'Dungeon [Standard]', value: THEMES.Dungeon },
+			{ name: 'Prison [Standard]', value: THEMES.Dungeon },
 			{ name: 'Haunted House', value: THEMES.HauntedHouse },
 			{ name: 'Abandoned Lab', value: THEMES.AbandonedLab },
 			{ name: 'Snowy Cabin', value: THEMES.SnowyCabin }
