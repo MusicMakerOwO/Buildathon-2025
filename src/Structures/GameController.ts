@@ -123,13 +123,16 @@ export class GameController {
 	 * This function returns nothing, you are expected to read from the logs after each interaction.
 	 */
 	handleInteraction(action: string, propString: string) {
+		if (this.gameOver) throw new Error('Game is over, no further interactions allowed.');
+		if (this.currentRoom === null) throw new Error('No current room, game is likely over');
+
 		if (action.toLowerCase() === 'inventory') {
 			this.addLog('You check your inventory.');
 			this.addLog(this.player.listInventory());
 			return;
 		}
 
-		this.addLog(`You attempt to ${action} the ${propString}.`);
+		this.addLog(`You ${action} the ${propString}.`);
 
 		// door interactions take priority over everything else in the room
 		if (propString.toLowerCase() === 'door') {
@@ -143,7 +146,17 @@ export class GameController {
 			if (!door.isLocked && action.toLowerCase() === 'open') {
 				this.moveToNextRoom();
 				this.addLog(response);
+
+				this.addBlankLog();
+
+				if (this.currentRoom === null) {
+					this.addLog('[ You have escaped - Thanks for playing <3 ]');
+					this.gameOver = true;
+					return;
+				}
+
 				this.addLog('[ You move to the next room ]');
+				this.addBlankLog();
 				this.addLog(this.currentRoom.description);
 			} else {
 				this.addLog(response);
