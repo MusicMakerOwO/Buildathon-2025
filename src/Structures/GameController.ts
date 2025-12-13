@@ -41,6 +41,7 @@ export class GameController {
 	player: PlayerController;
 	currentRoomIndex: number;
 	logs: string[];
+	gameOver: boolean;
 
 	constructor(theme: ObjectValues<typeof THEMES>, roomCount = 5) {
 		this.possibleRooms = ROOMS_BY_THEME[theme];
