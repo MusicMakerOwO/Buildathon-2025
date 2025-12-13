@@ -6,7 +6,8 @@ import {Key} from "./Items/Key";
 import {IsClass} from "../Utils/IsClass";
 import {PlayerController} from "./PlayerController";
 import {Door} from "./GameObjects/Door";
-import {GenerateRoomDescription, RoomContext, RoomModifiers} from "./GenerateRoomDescription";
+
+const BASE_ACTIONS = ['inventory', 'grab', 'take', 'examine'];
 
 export class RoomController {
 
@@ -14,7 +15,7 @@ export class RoomController {
 	items: Map<Class<Item>, Item>;
 	obstacles: Map<Class<Obstacle>, Obstacle>;
 
-	constructor(roomModifiers: RoomModifiers, storageObstacles: Class<StorageObstacle>[], obstacles: Class<Obstacle>[], items: Class<Item>[]) {
+	constructor(description: string, storageObstacles: Class<StorageObstacle>[], obstacles: Class<Obstacle>[], items: Class<Item>[]) {
 
 		for (const storageObstacleClass of storageObstacles) {
 			this.#VerifySubclass(storageObstacleClass, StorageObstacle);
@@ -32,41 +33,26 @@ export class RoomController {
 			throw new Error('At least one StorageObstacle subclass must be provided in obstacles array');
 		}
 
+		this.description = description;
 		this.items = new Map(); // Item class -> Item instance
 		this.obstacles = new Map(); // Obstacle class -> Obstacle instance
 
-		const context = this.#InitializeProps(roomModifiers, storageObstacles, obstacles, items);
-
-		this.description = GenerateRoomDescription(context);
+		this.#InitializeProps(storageObstacles, obstacles, items);
 	}
 
-	#InitializeProps(roomModifiers: RoomModifiers, storageObstacles: Class<StorageObstacle>[], obstacles: Class<Obstacle>[], items: Class<Item>[]): RoomContext {
 
-		const context: RoomContext = {
-			roomModifiers: roomModifiers,
-			// unused for now, but reserved for future use
-			atmosphereModifiers: {
-				light: [],
-				sounds: [],
-				smells: [],
-				noise: []
-			},
-			obstacles: [],
-			items: []
-		};
+	#InitializeProps(storageObstacles: Class<StorageObstacle>[], obstacles: Class<Obstacle>[], items: Class<Item>[]) {
 
 		// select 1 storage obstacle randomly to contain a key item
 		const randomIndex = Math.floor(Math.random() * storageObstacles.length);
 		const keyItem = new Key();
 		for (let i = 0; i < storageObstacles.length; i++) {
-			const StorageObject = i === randomIndex ? new storageObstacles[i](true, []) : new storageObstacles[i](true, [keyItem]);
+			const StorageObject = i === randomIndex ? new storageObstacles[i](false, [keyItem]) : new storageObstacles[i]();
 			this.obstacles.set(storageObstacles[i], StorageObject); // class -> instance
-			context.obstacles.push(StorageObject);
 		}
 		for (const ObstacleClass of obstacles) {
 			const obstacleInstance = new ObstacleClass();
 			this.obstacles.set(ObstacleClass, obstacleInstance); // class -> instance
-			context.obstacles.push(obstacleInstance);
 		}
 		for (const ItemClass of items) {
 			const itemInstance = new ItemClass();
@@ -76,10 +62,7 @@ export class RoomController {
 			} else {
 				this.items.set(ItemClass, itemInstance); // class -> instance
 			}
-			context.items.push(itemInstance);
 		}
-
-		return context;
 	}
 
 	#VerifySubclass(targetClass: Class<unknown>, baseClass: Class<unknown>) {
@@ -152,14 +135,32 @@ export class RoomController {
 		return Array.from( this.obstacles.values() ).map(obstacle => obstacle.name);
 	}
 	listAvailableActions() {
-		const actionsSet = new Set(['inventory', 'grab', 'take', 'examine']); // base actions
-		// Take - `take {item}` (from room's floor)
-		// Examine - `examine {item}` or `examine {obstacle}`
+		const actionsSet = new Set(BASE_ACTIONS);
 		for (const obstacle of this.obstacles.values()) {
 			for (const action of obstacle.availableActions) {
 				actionsSet.add(action);
 			}
 		}
 		return Array.from(actionsSet);
+	}
+
+	getObstaclesForAction(action: string) {
+		action = String(action).toLowerCase();
+		const matchingObstacles: Obstacle[] = [];
+		for (const obstacle of this.obstacles.values()) {
+			if (obstacle.availableActions.includes(action)) {
+				matchingObstacles.push(obstacle);
+			}
+		}
+		return matchingObstacles;
+	}
+	getActionsForObstacle(obstacleName: string) {
+		obstacleName = String(obstacleName).toLowerCase();
+		for (const obstacle of this.obstacles.values()) {
+			if (obstacle.name.toLowerCase() === obstacleName) {
+				return obstacle.availableActions;
+			}
+		}
+		return [];
 	}
 }

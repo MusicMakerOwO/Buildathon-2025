@@ -1,21 +1,24 @@
 import {Item} from "./Item";
-import {Obstacle, ObstaclePositions} from "./Obstacle";
+import {Obstacle} from "./Obstacle";
 import {PlayerController} from "./PlayerController";
 import {Key} from "./Items/Key";
-import {ObjectValues} from "../Typings/Helpers";
 
 export class StorageObstacle extends Obstacle {
 	contents: Item[];
 	isLocked: boolean;
 
-	constructor(name: string, description: string, position: ObjectValues<typeof ObstaclePositions>, placementDescription: string, isLocked: boolean, contents: Item[], additionActions?: string[]) {
+	constructor(
+		name: string,
+		description: string,
+		isLocked: boolean,
+		contents: Item[],
+		additionActions?: string[]
+	) {
 		super(
 			name,
 			description,
-			position,
-			placementDescription,
 			(
-				contents.length > 0 ? ['unlock', 'open'] : []
+				isLocked ? ['unlock', 'open'] : ['open']
 			).concat(additionActions || [])
 		);
 
@@ -26,7 +29,7 @@ export class StorageObstacle extends Obstacle {
 	interact(player: PlayerController, action: string) {
 		if (action === 'open') {
 			if (this.contents.length === 0) {
-				return `You try to open the ${this.name}, but find nothing of interest.`;
+				return `You open the ${this.name}, but find nothing of interest.`;
 			} else {
 				if (this.isLocked) {
 					return `The ${this.name} is locked. You must unlock it first.`;

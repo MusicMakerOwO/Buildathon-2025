@@ -1,4 +1,4 @@
-import {Obstacle, ObstaclePositions} from '../Obstacle'
+import {Obstacle} from '../Obstacle'
 
 const FURNITURE_OPTIONS: [name: string, description: string][] = [
 	[
@@ -33,8 +33,6 @@ export class StaticFurniture extends Obstacle {
 	constructor() {
 		super(
 			... FURNITURE_OPTIONS[ Math.floor(Math.random() * FURNITURE_OPTIONS.length) ],
-			ObstaclePositions.ROOM,
-			'placed roughly in the middle of the room for no apparent reason',
 		);
 	}
 }

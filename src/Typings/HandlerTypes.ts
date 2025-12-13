@@ -1,8 +1,7 @@
 import {
 	ButtonInteraction,
-	ChatInputCommandInteraction,
-	Interaction,
-	SlashCommandBuilder
+	ChatInputCommandInteraction, ModalSubmitInteraction,
+	SlashCommandBuilder, StringSelectMenuInteraction
 } from "discord.js";
 import {IClient} from "../Client";
 import {ObjectValues} from "./Helpers";
@@ -22,12 +21,12 @@ export interface ButtonHandler {
 
 export interface SelectMenuHandler {
 	customID: string;
-	execute: (interaction: Interaction, client: IClient, args: string[]) => Promise<any>;
+	execute: (interaction: StringSelectMenuInteraction, client: IClient, args: string[]) => Promise<any>;
 }
 
 export interface ModalHandler {
 	customID: string;
-	execute: (interaction: Interaction, client: IClient, args: string[]) => Promise<any>;
+	execute: (interaction: ModalSubmitInteraction, client: IClient, args: string[]) => Promise<any>;
 }
 
 export interface EventHandler {

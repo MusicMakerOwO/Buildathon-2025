@@ -1,5 +1,5 @@
 import {PlayerController} from "../PlayerController";
-import {Obstacle, ObstaclePositions} from "../Obstacle";
+import {Obstacle} from "../Obstacle";
 import {Key} from "../Items/Key";
 
 export class Door extends Obstacle {
@@ -9,8 +9,6 @@ export class Door extends Obstacle {
 		super(
 			'Door',
 			'A sturdy wooden door with iron hinges. It looks like it can be locked or unlocked.',
-			ObstaclePositions.WALL,
-			'positioned into the wall',
 			['open', 'unlock'],
 		);
 		this.isLocked = true;
