@@ -1,6 +1,6 @@
 import {ButtonHandler} from "../../Typings/HandlerTypes";
 
-const LOGS_PER_PAGE = 10;
+export const LOGS_PER_PAGE = 10;
 
 /*
 World interactions will be a little weird since we have to manage everything through buttons and select menus.
@@ -43,18 +43,43 @@ export default {
 			await interaction.deferUpdate();
 		}
 
-		const gameKey = parseInt(args[0]);
+		const gameKey = parseInt(args.shift()!);
 		const game = client.gameInstances.get(gameKey);
 		if (!game) {
-			await interaction.editReply({ content: 'This game session has expired or does not exist.' });
+			await interaction.editReply({
+				embeds: [{
+					color: 0xFF0000,
+					description: 'This game session has expired or does not exist.'
+				}],
+				components: []
+			});
 			return;
+		}
+
+		let [ action, obstacle ] = args;
+		if (action === 'null') action = '';
+		if (obstacle === 'null') obstacle = '';
+
+		if (action === 'inventory') {
+			game.instance.addBlankLog();
+			game.instance.handleInteraction('inventory', '');
+
+			// consume action after processing
+			action = '';
+		} else if (action && obstacle) {
+			game.instance.addBlankLog();
+			game.instance.handleInteraction(action, obstacle);
+			// reset log offset to show latest logs
+			game.logOffset = 0;
+
+			// consume action and obstacle after processing
+			action = '';
+			obstacle = '';
 		}
 
 		const logsToDisplay = game.instance.logs.slice( - (game.logOffset + LOGS_PER_PAGE), - game.logOffset || undefined);
 
 		const logMessage = logsToDisplay.length > 0 ? logsToDisplay.join('\n') : '[ SOMETHING WENT WRONG ]';
-
-		console.log(game.instance);
 
 		const embed = {
 			title: 'Game Log',
@@ -73,14 +98,14 @@ ${logMessage}
 					type: 2,
 					style: 1,
 					label: '⬆️ Scroll Up',
-					custom_id: `dungeon-scrollup_${gameKey}`,
+					custom_id: `dungeon-scroll_up_${gameKey}_${action || ''}_${obstacle || ''}`,
 					disabled: game.logOffset + LOGS_PER_PAGE >= game.instance.logs.length
 				},
 				{
 					type: 2,
 					style: 1,
 					label: '⬇️ Scroll Down',
-					custom_id: `dungeon-scrolldown_${gameKey}`,
+					custom_id: `dungeon-scroll_down_${gameKey}_${action || ''}_${obstacle || ''}`,
 					disabled: game.logOffset === 0
 				}
 			]
@@ -91,12 +116,13 @@ ${logMessage}
 			components: [
 				{
 					type: 3,
-					custom_id: `dungeon-actionselect_${gameKey}`,
+					custom_id: `dungeon-actionselect_${gameKey}_${obstacle || ''}`,
 					placeholder: 'Choose an action ...',
-					options: game.instance.currentRoom.listAvailableActions().map(action => ({
-						label: action.charAt(0).toUpperCase() + action.slice(1),
-						value: action
-					}))
+					options: game.instance.listAvailableActions().map(act => ({
+						label: act,
+						value: act
+					})),
+					disabled: false
 				}
 			]
 		};
@@ -106,19 +132,81 @@ ${logMessage}
 			components: [
 				{
 					type: 3,
-					custom_id: `dungeon-obstacleselect_${gameKey}`,
+					custom_id: `dungeon-obstacleselect_${gameKey}_${action || ''}`,
 					placeholder: 'Choose an object ...',
-					options: game.instance.currentRoom.listObstacles().map(prop => ({
-						label: prop.charAt(0).toUpperCase() + prop.slice(1),
-						value: prop
-					}))
+					options: game.instance.listObstacles().map(obj => ({
+						label: obj,
+						value: obj
+					})),
+					disabled: false
 				}
 			]
 		};
 
-		await interaction.editReply({
-			embeds: [embed],
-			components: [buttons, actionSelection, objectSelection]
-		});
+		if (action || obstacle) {
+			if (action) {
+				actionSelection.components[0].placeholder = action;
+
+				// only display objects that support the selected action
+				const possibleObjects = game.instance.getObstaclesForAction(action);
+				objectSelection.components[0].options.length = 0; // clear existing options
+				for (const obj of possibleObjects) {
+					objectSelection.components[0].options.push({
+						label: obj.name,
+						value: obj.name
+					});
+				}
+			}
+			if (obstacle) {
+				objectSelection.components[0].placeholder = obstacle;
+				// only display actions that can be performed on the selected object
+				const possibleActions = game.instance.getActionsForObstacle(obstacle);
+				actionSelection.components[0].options.length = 0; // clear existing options
+				for (const act of possibleActions) {
+					actionSelection.components[0].options.push({
+						label: act,
+						value: act
+					});
+				}
+			}
+
+			if (actionSelection.components[0].options.length === 0) {
+				actionSelection.components[0].placeholder = '[ NO ACTIONS AVAILABLE ]';
+				actionSelection.components[0].options.push({
+					label: '[ NO ACTIONS AVAILABLE ]',
+					value: 'null'
+				});
+				actionSelection.components[0].disabled = true;
+			}
+			if (objectSelection.components[0].options.length === 0) {
+				objectSelection.components[0].placeholder = '[ NO OBJECTS AVAILABLE ]';
+				objectSelection.components[0].options.push({
+					label: '[ NO OBJECTS AVAILABLE ]',
+					value: 'null'
+				});
+				objectSelection.components[0].disabled = true;
+			}
+		}
+
+		if (game.instance.gameOver) {
+			await interaction.editReply({
+				embeds: [{
+					title: 'Game Over',
+					description: `
+\`\`\`
+${logMessage}
+\`\`\`
+					`.trim(),
+					color: 0x00AAFF,
+					footer: { text: 'Made with ❤️ by @musicmaker' }
+				}],
+				components: [buttons]
+			});
+		} else {
+			await interaction.editReply({
+				embeds: [embed],
+				components: [buttons, actionSelection, objectSelection]
+			});
+		}
 	}
 } as ButtonHandler;
