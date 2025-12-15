@@ -10,7 +10,7 @@ class FloorProp extends Prop {
 		super(
 			'Floor',
 			'A dusty old floor. Nothing special about it.',
-			[]
+			items
 		);
 	}
 }
