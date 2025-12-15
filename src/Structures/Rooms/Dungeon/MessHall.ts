@@ -10,8 +10,7 @@ The smell of stale food lingers in the air, mixed with the scent of damp stone w
 Wooden crates and chests are stacked against the walls, some slightly ajar as if recently rummaged through. \
 A single lantern hangs from a hook on the wall, its dim light casting long shadows across the room.
 `.trim(),
-			[Chest, Crate],
-			[Lantern, Bench, Table],
+			[Chest, Crate, Lantern, Bench, Table],
 			[]
 		);
 	}

@@ -1,10 +1,10 @@
 import {Dungeon} from "./TutorialRooms/Dungeon";
 import {Class, ObjectValues} from "../Typings/Helpers";
 import {RoomController} from "./RoomController";
-import {Door} from "./GameObjects/Door";
 import {PlayerController} from "./PlayerController";
 import {MessHall} from "./Rooms/Dungeon/MessHall";
 import {TortureChamber} from "./Rooms/Dungeon/TortureChamber";
+import {Item, Prop} from "./CoreStructs";
 
 export const THEMES = {
 	Dungeon: 'dungeon',
@@ -36,12 +36,11 @@ const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<RoomContro
 export class GameController {
 
 	possibleRooms: Array<Class<RoomController>>;
-	rooms: RoomController[];
-	doors: Door[];
 	player: PlayerController;
-	currentRoomIndex: number;
 	logs: string[];
 	gameOver: boolean;
+	roomsCleared: number;
+	currentRoom: RoomController | null;
 
 	constructor(theme: ObjectValues<typeof THEMES>, roomCount = 5) {
 		this.possibleRooms = ROOMS_BY_THEME[theme];
@@ -53,27 +52,11 @@ export class GameController {
 			throw new Error(`No tutorial room defined for theme: ${theme}`);
 		}
 
-		this.rooms = new Array(roomCount + 1).fill(null);
-		// first room is always the tutorial room
-		this.rooms[0] = new tutorialRoomClass();
-
-		// prevent consecutive rooms from being the same
-		for (let i = 1; i < this.rooms.length; i++) {
-			let SelectedRoomClass: Class<RoomController>;
-			do {
-				const randomIndex = Math.floor(Math.random() * this.possibleRooms.length);
-				SelectedRoomClass = this.possibleRooms[randomIndex];
-			} while ( this.rooms[i - 1]?.constructor === SelectedRoomClass );
-			this.rooms[i] = new SelectedRoomClass();
-		}
-
-		// room boundaries, N-1 doors for N rooms
-		this.doors = new Array(roomCount).fill(null).map( () => new Door() );
-
 		// inventory management
 		this.player = new PlayerController();
 
-		this.currentRoomIndex = 0;
+		this.roomsCleared = 0;
+		this.currentRoom = new tutorialRoomClass();
 
 		this.logs = [];
 
@@ -90,31 +73,33 @@ export class GameController {
 		this.logs.push(entry);
 	}
 
-	get currentRoom(): RoomController | null {
-		return this.rooms[this.currentRoomIndex] ?? null;
-	}
-
-	/**
-	 * Returns a `Door` instance or `null` if last room
-	 */
-	get currentRoomBoundary() {
-		if (this.currentRoomIndex >= this.rooms.length - 1) {
-			return null; // no boundary after last room
-		}
-		return this.doors[this.currentRoomIndex];
-	}
-
 	canMoveToNextRoom() {
-		const door = this.currentRoomBoundary;
-		if (!door) return false; // no next room
-		return !door.isLocked;
+		if (this.gameOver) return false;
+		if (this.currentRoom === null) return false;
+
+		return this.currentRoom.isUnlocked;
 	}
 
 	moveToNextRoom() {
 		if (!this.canMoveToNextRoom()) {
 			throw new Error('Cannot move to next room, door is locked or no next room exists');
 		}
-		this.currentRoomIndex++;
+		this.roomsCleared += 1;
+
+		// check if we have cleared enough rooms to end the game
+		if (this.roomsCleared >= 5) {
+			this.currentRoom = null; // signifies game over
+			return;
+		}
+
+		// pick a new random room, do not repeat the same room consecutively
+		let nextRoomClass: Class<RoomController>;
+		do {
+			const randomIndex = Math.floor(Math.random() * this.possibleRooms.length);
+			nextRoomClass = this.possibleRooms[randomIndex];
+		} while (this.currentRoom && nextRoomClass === this.currentRoom.constructor);
+
+		this.currentRoom = new nextRoomClass();
 	}
 
 	/**
@@ -122,103 +107,36 @@ export class GameController {
 	 * All outputs are written to `GameController.logs`.
 	 * This function returns nothing, you are expected to read from the logs after each interaction.
 	 */
-	handleInteraction(action: string, propString: string) {
+	interact(action: Capitalize<string>, propString: string) {
 		if (this.gameOver) throw new Error('Game is over, no further interactions allowed.');
 		if (this.currentRoom === null) throw new Error('No current room, game is likely over');
 
-		if (action.toLowerCase() === 'inventory') {
+		if (action === 'Inventory') {
 			this.addLog('You check your inventory.');
 			this.addLog(this.player.listInventory());
 			return;
 		}
 
+		this.addBlankLog();
 		this.addLog(`You ${action} the ${propString}.`);
 
-		// door interactions take priority over everything else in the room
-		if (propString.toLowerCase() === 'door') {
-			const door = this.currentRoomBoundary;
-			if (!door) {
-				this.addLog('There is no door here.');
-				return;
-			}
-			// the door mutates it's internal state (only isLocked flag) when unlocking
-			const response = door.interact(this.player, action);
-			if (!door.isLocked && action.toLowerCase() === 'open') {
-				this.moveToNextRoom();
-				this.addLog(response);
-
-				this.addBlankLog();
-
-				if (this.currentRoom === null) {
-					this.addLog('[ You have escaped - Thanks for playing <3 ]');
-					this.gameOver = true;
-					return;
-				}
-
-				this.addLog('[ You move to the next room ]');
-				this.addBlankLog();
-				this.addLog(this.currentRoom.description);
-			} else {
-				this.addLog(response);
-			}
-			return;
-		}
-
-		this.addLog( this.currentRoom.interact(this.player, action, propString) );
+		const response = this.currentRoom.interact(this.player, action, propString);
+		this.addLog(response.message);
 	}
 
-	listAvailableActions() {
-		if (this.currentRoom === null) return [];
-		if (this.gameOver) return [];
-
-		const actions = this.currentRoom.listAvailableActions();
-		const door = this.currentRoomBoundary;
-		if (door) {
-			for (const act of door.availableActions) {
-				if (!actions.includes(act)) {
-					actions.push(act);
-				}
-			}
-		}
-		return actions;
+	// bubble up RoomController methods for convenience and game boundary handling
+	get availableActions(): Record<Capitalize<string>, Prop[]> | null {
+		if (this.gameOver || this.currentRoom === null) return null;
+		return this.currentRoom.availableActions;
 	}
 
-	listObstacles() {
-		if (this.currentRoom === null) return [];
-		if (this.gameOver) return [];
-
-		const obstacles = this.currentRoom.listObstacles();
-		const door = this.currentRoomBoundary;
-		if (door) {
-			obstacles.push(door.name);
-		}
-		return obstacles;
+	get itemsOnFloor(): Item[] | null {
+		if (this.gameOver || this.currentRoom === null) return null;
+		return this.currentRoom.itemsOnFloor;
 	}
 
-	getObstaclesForAction(action: string) {
-		if (this.currentRoom === null) return [];
-		if (this.gameOver) return [];
-
-		const obstacles = this.currentRoom.getObstaclesForAction(action);
-		const door = this.currentRoomBoundary;
-		if (door && door.availableActions.includes(action)) {
-			obstacles.push(door);
-		}
-		return obstacles;
-	}
-	getActionsForObstacle(obstacleName: string) {
-		if (this.currentRoom === null) return [];
-		if (this.gameOver) return [];
-
-		const actions = this.currentRoom.getActionsForObstacle(obstacleName);
-		const door = this.currentRoomBoundary;
-		if (door && door.name.toLowerCase() === obstacleName.toLowerCase()) {
-			for (const act of door.availableActions) {
-				if (!actions.includes(act)) {
-					actions.push(act);
-				}
-			}
-		}
-		return actions;
+	resolvePropByName(propName: string): Prop | null {
+		if (this.gameOver || this.currentRoom === null) return null;
+		return this.currentRoom.resolvePropByName(propName);
 	}
 }

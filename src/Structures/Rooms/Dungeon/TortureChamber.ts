@@ -10,8 +10,7 @@ Various implements of torture are scattered around the room, including a menacin
 Dried blood splatters the floor and walls, a grim reminder of the suffering that has taken place here.
 You pray that you will not be the next victim in this dreadful place.
 `.trim(),
-			[Chest, Locker],
-			[RustedChains, BloodStains, IronMaiden],
+			[Chest, Locker, RustedChains, BloodStains, IronMaiden],
 			[]
 		);
 	}
