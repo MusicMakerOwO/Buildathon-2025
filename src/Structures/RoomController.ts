@@ -1,9 +1,19 @@
 import {Class} from "../Typings/Helpers";
-import {Key} from "./Items/Key";
+import {Key} from "./Items";
 import {PlayerController} from "./PlayerController";
 import {InteractionResult, Item, Prop} from "./CoreStructs";
 
 const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Grab', 'Examine'] as const;
+
+class FloorProp extends Prop {
+	constructor(items: Item[]) {
+		super(
+			'Floor',
+			'A dusty old floor. Nothing special about it.',
+			[]
+		);
+	}
+}
 
 export class RoomController {
 
@@ -33,15 +43,18 @@ export class RoomController {
 			const propInstance: Prop = i === randomIndex ? new PropClass(keyItem) : new PropClass();
 			this.obstacles.set(PropClass, propInstance); // class -> instance
 		}
+		const itemList = new Map();
 		for (const ItemClass of items) {
 			const itemInstance = new ItemClass();
-			if (this.items.has(ItemClass)) {
+			if (!this.items.has(ItemClass)) {
+				this.items.set(ItemClass, itemInstance);
+			} else {
+				// if item already exists (multiple of same type), increase quantity
 				const existingItem = this.items.get(ItemClass)!;
 				existingItem.count += itemInstance.count;
-			} else {
-				this.items.set(ItemClass, itemInstance); // class -> instance
 			}
 		}
+		this.obstacles.set(FloorProp, new FloorProp( Array.from(itemList.values()) ));
 	}
 
 	/**
