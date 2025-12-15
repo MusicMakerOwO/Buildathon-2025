@@ -1,5 +1,4 @@
-import {Prop, Item} from "./CoreStructs";
-import {StorageObstacle} from "./StorageObstacle";
+import {Prop, Item, LockableProp} from "./CoreStructs";
 
 export class Bench extends Prop {
 	constructor() {
@@ -9,7 +8,7 @@ export class Bench extends Prop {
 		);
 	}
 }
-export class WoodStove extends StorageObstacle {
+export class WoodStove extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		isLocked = false;
 		super(
@@ -54,7 +53,7 @@ export class WallMount extends Prop {
 	}
 }
 
-export class ToolBox extends StorageObstacle {
+export class ToolBox extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		isLocked = false;
 		super(
@@ -77,7 +76,7 @@ export class Table extends Prop {
 
 // This is for furniture that can be interacted with, like cabinets or drawers
 // For non-interactable furniture, use StaticFurniture instead
-export class StorageFurniture extends StorageObstacle {
+export class StorageFurniture extends LockableProp {
 
 	static RANDOM_OPTIONS: [name: string, description: string][] = [
 		[
@@ -149,7 +148,7 @@ export class StaticFurniture extends Prop {
 	}
 }
 
-export class SpecimenLocker extends StorageObstacle {
+export class SpecimenLocker extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Specimen Locker',
@@ -187,7 +186,7 @@ export class Shackles extends Prop {
 	}
 }
 
-export class Safe extends StorageObstacle {
+export class Safe extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Safe',
@@ -244,7 +243,7 @@ export class ObservationWindow extends Prop {
 	}
 }
 
-export class Locker extends StorageObstacle {
+export class Locker extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Locker',
@@ -308,7 +307,7 @@ export class FrostedWindow extends Prop {
 	}
 }
 
-export class Dresser extends StorageObstacle {
+export class Dresser extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Dresser',
@@ -339,7 +338,7 @@ export class Desk extends Prop {
 	}
 }
 
-export class Crate extends StorageObstacle {
+export class Crate extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Crate',
@@ -350,7 +349,7 @@ export class Crate extends StorageObstacle {
 	}
 }
 
-export class Crack extends StorageObstacle {
+export class Crack extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		isLocked = false;
 		super(
@@ -371,7 +370,7 @@ export class CollapsedVent extends Prop {
 	}
 }
 
-export class ColdStorageUnit extends StorageObstacle {
+export class ColdStorageUnit extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Cold Storage Unit',
@@ -418,7 +417,7 @@ export class GrandfatherClock extends Prop {
 	}
 }
 
-export class Chest extends StorageObstacle {
+export class Chest extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Chest',
@@ -429,7 +428,7 @@ export class Chest extends StorageObstacle {
 	}
 }
 
-export class ChemicalCabinet extends StorageObstacle {
+export class ChemicalCabinet extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			'Chemical Cabinet',
