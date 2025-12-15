@@ -1,4 +1,4 @@
-import {Item} from "../Item";
+import {Item} from "../CoreStructs";
 
 export class Rock extends Item {
 	constructor() {

@@ -1,4 +1,4 @@
-import {Item} from '../Item.js';
+import {Item} from '../CoreStructs';
 
 export class Key extends Item {
 	constructor() {
