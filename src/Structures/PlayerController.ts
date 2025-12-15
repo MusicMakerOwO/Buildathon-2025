@@ -1,15 +1,12 @@
-// const Item = require('./Item');
-// const IsClass = require('../Utils/IsClass');
-
-import {IsClass} from "../Utils/IsClass";
-import {Item} from "./Item";
 import {Class} from "../Typings/Helpers";
+import {Entity, Item} from "./CoreStructs";
 
-export class PlayerController {
+export class PlayerController extends Entity {
 
 	inventory: Map<Class<Item>, Item>;
 
 	constructor() {
+		super('Player', 'Hey look, it\'s you :D', 100, {min: 5, max: 10});
 		this.inventory = new Map(); // Class -> Class instance
 	}
 
