@@ -210,8 +210,13 @@ export class Item {
 		return { message: `You can't ${action} the ${this.name}.` };
 	}
 
-	use(target: unknown) {
-		throw new Error('Use method not implemented for this item');
+	// Override on children
+	use(target: RoomController | PlayerController | Prop): InteractionResult {
+		return { message: `You can't use the ${this.name}.` };
+	}
+
+	get display() {
+		return `${this.name} (x${this.count})`;
 	}
 
 	get totalWeight() {
