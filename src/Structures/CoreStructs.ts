@@ -192,7 +192,7 @@ export class Item {
 		this.weight      = weight || 0;
 		this.count       = count  || 1;
 		this.actions     = {
-			'Examine': (room, player) => {
+			'Examine': () => {
 				return { message: this.description };
 			},
 			... additionalActions

@@ -49,10 +49,10 @@ export class TransitionProp {
 		this.name = name;
 		this.description = description;
 		this.actions = {
-			'Examine': (room, player) => {
+			'Examine': () => {
 				return { message: this.description };
 			},
-			'Open': (room, player) => {
+			'Open': () => {
 				if (this.isLocked) {
 					return { message: `The ${this.name} is locked. You must unlock it first.` };
 				} else {
@@ -87,7 +87,7 @@ export class TransitionProp {
 				return { message: `You use the ${itemUsed.name} to unlock the ${this.name}. You hear a soft click and can now open it.` };
 			}
 		} else {
-			this.actions['Unlock'] = (room, player) => {
+			this.actions['Unlock'] = () => {
 				return { message: `The ${this.name} is already unlocked.` };
 			};
 		}
