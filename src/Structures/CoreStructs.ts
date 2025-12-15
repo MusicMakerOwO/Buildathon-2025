@@ -47,7 +47,7 @@ export class Entity {
 }
 
 // bad name, I know, but "object" is taken in JS
-export class Obstacle {
+export class Prop {
 
 	name: string;
 	description: string;

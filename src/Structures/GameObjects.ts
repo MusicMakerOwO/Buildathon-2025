@@ -1,8 +1,7 @@
-import {Obstacle} from "./Obstacle";
-import {Item} from "./Item";
+import {Prop, Item} from "./CoreStructs";
 import {StorageObstacle} from "./StorageObstacle";
 
-export class Bench extends Obstacle {
+export class Bench extends Prop {
 	constructor() {
 		super(
 			'Bench',
@@ -22,7 +21,7 @@ export class WoodStove extends StorageObstacle {
 	}
 }
 
-export class WallMount extends Obstacle {
+export class WallMount extends Prop {
 
 	static RANDOM_OPTIONS: [name: string, description: string][] = [
 		[
@@ -67,7 +66,7 @@ export class ToolBox extends StorageObstacle {
 	}
 }
 
-export class Table extends Obstacle {
+export class Table extends Prop {
 	constructor() {
 		super(
 			'Table',
@@ -114,7 +113,7 @@ export class StorageFurniture extends StorageObstacle {
 
 // This is for furniture that cannot be interacted with, only observed
 // For interactable furniture, use ./StorageFurniture.js instead
-export class StaticFurniture extends Obstacle {
+export class StaticFurniture extends Prop {
 
 	static RANDOM_OPTIONS: [name: string, description: string][] = [
 		[
@@ -161,7 +160,7 @@ export class SpecimenLocker extends StorageObstacle {
 	}
 }
 
-export class SnowdriftBlockage extends Obstacle {
+export class SnowdriftBlockage extends Prop {
 	constructor() {
 		super(
 			'Snowdrift Blockage',
@@ -170,7 +169,7 @@ export class SnowdriftBlockage extends Obstacle {
 	}
 }
 
-export class ShatteredControlPanel extends Obstacle {
+export class ShatteredControlPanel extends Prop {
 	constructor() {
 		super(
 			'Shattered Control Panel',
@@ -179,7 +178,7 @@ export class ShatteredControlPanel extends Obstacle {
 	}
 }
 
-export class Shackles extends Obstacle {
+export class Shackles extends Prop {
 	constructor() {
 		super(
 			'Shackles',
@@ -199,7 +198,7 @@ export class Safe extends StorageObstacle {
 	}
 }
 
-export class RustedChains extends Obstacle {
+export class RustedChains extends Prop {
 	constructor() {
 		super(
 			'Rusted Chains',
@@ -208,7 +207,7 @@ export class RustedChains extends Obstacle {
 	}
 }
 
-export class Painting extends Obstacle {
+export class Painting extends Prop {
 
 	static RANDOM_DESCRIPTIONS = [
 		"An old painting of a serene landscape. It looks slightly crooked on the wall.",
@@ -236,7 +235,7 @@ export class Painting extends Obstacle {
 	}
 }
 
-export class ObservationWindow extends Obstacle {
+export class ObservationWindow extends Prop {
 	constructor() {
 		super(
 			'Observation Window',
@@ -256,7 +255,7 @@ export class Locker extends StorageObstacle {
 	}
 }
 
-export class Lantern extends Obstacle {
+export class Lantern extends Prop {
 
 	static RANDOM_DESCRIPTIONS = [
 		'A rusty old lantern hanging from a hook on the wall. It looks like it could still be functional if you had some oil and a match to light it.',
@@ -273,7 +272,7 @@ export class Lantern extends Obstacle {
 	}
 }
 
-export class IronMaiden extends Obstacle {
+export class IronMaiden extends Prop {
 	constructor() {
 		super(
 			'Iron Maiden',
@@ -282,7 +281,7 @@ export class IronMaiden extends Obstacle {
 	}
 }
 
-export class IronBars extends Obstacle {
+export class IronBars extends Prop {
 	constructor() {
 		super(
 			'Iron Bars',
@@ -291,7 +290,7 @@ export class IronBars extends Obstacle {
 	}
 }
 
-export class IcicleCluster extends Obstacle {
+export class IcicleCluster extends Prop {
 	constructor() {
 		super(
 			'Icicle Cluster',
@@ -300,7 +299,7 @@ export class IcicleCluster extends Obstacle {
 	}
 }
 
-export class FrostedWindow extends Obstacle {
+export class FrostedWindow extends Prop {
 	constructor() {
 		super(
 			'Frosted Window',
@@ -322,7 +321,7 @@ export class Dresser extends StorageObstacle {
 	}
 }
 
-export class Desk extends Obstacle {
+export class Desk extends Prop {
 
 	static RANDOM_DESCRIPTIONS = [
 		'A wooden desk covered in various papers, books, and miscellaneous items. It looks like someone has been using it recently.',
@@ -363,7 +362,7 @@ export class Crack extends StorageObstacle {
 	}
 }
 
-export class CollapsedVent extends Obstacle {
+export class CollapsedVent extends Prop {
 	constructor() {
 		super(
 			'Collapsed Vent',
@@ -383,7 +382,7 @@ export class ColdStorageUnit extends StorageObstacle {
 	}
 }
 
-export class WallClock extends Obstacle {
+export class WallClock extends Prop {
 
 	static RANDOM_DESCRIPTIONS = [
 		'An old wall clock with Roman numerals and ornate hands. It ticks loudly, filling the room with its steady rhythm.',
@@ -401,7 +400,7 @@ export class WallClock extends Obstacle {
 	}
 }
 
-export class GrandfatherClock extends Obstacle {
+export class GrandfatherClock extends Prop {
 
 	static RANDOM_DESCRIPTIONS = [
 		'A towering grandfather clock with a polished wooden case and a swinging pendulum. Its deep chimes resonate through the room every hour.',
@@ -441,7 +440,7 @@ export class ChemicalCabinet extends StorageObstacle {
 	}
 }
 
-export class Candle extends Obstacle {
+export class Candle extends Prop {
 	constructor() {
 		super(
 			'Candle',
@@ -450,7 +449,7 @@ export class Candle extends Obstacle {
 	}
 }
 
-export class BrokenTestTubes extends Obstacle {
+export class BrokenTestTubes extends Prop {
 	constructor() {
 		super(
 			'Broken Test Tubes',
@@ -459,7 +458,7 @@ export class BrokenTestTubes extends Obstacle {
 	}
 }
 
-export class Bookshelf extends Obstacle {
+export class Bookshelf extends Prop {
 	constructor() {
 		super(
 			'Bookshelf',
@@ -468,7 +467,7 @@ export class Bookshelf extends Obstacle {
 	}
 }
 
-export class BloodStains extends Obstacle {
+export class BloodStains extends Prop {
 	constructor() {
 		super(
 			'Blood Stains',
