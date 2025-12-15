@@ -1,9 +1,5 @@
 import {RoomController} from "../../RoomController";
-import {Chest} from "../../GameObjects/Chest";
-import {RustedChains} from "../../GameObjects/RustedChains";
-import {Locker} from "../../GameObjects/Locker";
-import {BloodStains} from "../../GameObjects/BloodStains";
-import {IronMaiden} from "../../GameObjects/IronMaiden";
+import {BloodStains, Chest, IronMaiden, Locker, RustedChains} from "../../GameObjects";
 
 export class TortureChamber extends RoomController {
 	constructor() {

@@ -1,6 +1,5 @@
 import {RoomController} from "../RoomController";
-import {Crack} from "../GameObjects/Crack";
-import {Candle} from "../GameObjects/Candle";
+import {Candle, Crack} from "../GameObjects";
 
 export class Dungeon extends RoomController {
 	constructor() {

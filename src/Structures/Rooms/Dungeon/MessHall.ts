@@ -1,9 +1,5 @@
 import {RoomController} from "../../RoomController";
-import {Chest} from "../../GameObjects/Chest";
-import {Lantern} from "../../GameObjects/Lantern";
-import {Crate} from "../../GameObjects/Crate";
-import {Table} from "../../GameObjects/Table";
-import {Bench} from "../../GameObjects/Bench";
+import {Bench, Chest, Crate, Lantern, Table} from "../../GameObjects";
 
 export class MessHall extends RoomController {
 	constructor() {
