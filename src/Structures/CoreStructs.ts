@@ -1,14 +1,15 @@
 import {Log} from '../Utils/Log';
 import {PlayerController} from "./PlayerController";
 import {RoomController} from "./RoomController";
-import {Key} from "./Items/Key";
+import {Key} from "./Items";
 
 export type InteractionResult = {
 	message: string;
+	/** Move the player to the next room after this interaction */
+	nextRoom?: boolean;
 }
 
 export type InteractionCallback = (room: RoomController, player: PlayerController) => InteractionResult;
-
 export type PropInteractionMap = Record<Capitalize<string>, InteractionCallback>;
 
 export class Entity {
@@ -67,12 +68,43 @@ export class Prop {
 		this.name = name;
 		this.description = description;
 		this.contents = contents ?? [];
-		this.actions = {};
+		this.actions = {
+			'Examine': (room, player) => {
+				if (this.contents.length === 0) {
+					return { message: this.description };
+				}
 
-		// setup default actions
-		this.actions['Examine'] = (room, player) => {
-			return { message: this.description };
-		};
+				const itemList = this.contents.map(item => item.display);
+				for (let i = 0; i < this.contents.length; i++) {
+					player.addItem(this.contents[i]);
+				}
+				this.contents = [];
+
+				if (this.contents.length === 1) {
+					return {
+						message: `
+	${this.description}
+	You spot something inside: ${itemList[0]}.
+	You pick it up and add it to your inventory.
+	`.trim()
+					};
+				}
+
+				return {
+					message: `
+	${this.description}
+	You spot several items inside:
+	${itemList.map(item => '- ' + item).join('\n')}
+	You pick them up and add them to your inventory.
+	`.trim()
+				}
+			},
+			... additionalActions
+		}
+	}
+
+	overrideAction(actionName: Capitalize<string>, callback: InteractionCallback) {
+		this.actions[actionName] = callback;
 	}
 
 	get availableActions(): Capitalize<string>[] {
