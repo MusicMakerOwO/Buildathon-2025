@@ -13,24 +13,11 @@ export class PlayerController {
 		this.inventory = new Map(); // Class -> Class instance
 	}
 
-	#VerifyItemSubclass(itemClass: Class<Item>) {
-		if (!IsClass(itemClass)) {
-			throw new TypeError('itemClass must be a class definition');
-		}
-		if (!(itemClass.prototype instanceof Item)) {
-			throw new TypeError('itemClass must be a subclass of Item');
-		}
-		if (itemClass === Item) {
-			throw new Error('Cannot use base Item class, must specify a subclass');
-		}
-	}
-
 	/**
 	 * Checks if the player has an item of the specified class in their inventory.
 	 * Returns the quantity if found, otherwise returns false.
 	 */
 	hasItem(itemClass: Class<Item>) {
-		this.#VerifyItemSubclass(itemClass);
 		if (this.inventory.has(itemClass)) {
 			return this.inventory.get(itemClass)!.count;
 		}
@@ -57,7 +44,6 @@ export class PlayerController {
 	 * Returns the new count of the item type after removal.
 	 */
 	removeItem(itemClass: Class<Item>, amount = 1) {
-		this.#VerifyItemSubclass(itemClass);
 		amount = Number(amount) || 1;
 		if (amount <= 0) {
 			throw new RangeError('Amount to remove must be a positive number');
