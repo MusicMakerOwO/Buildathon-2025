@@ -1,5 +1,15 @@
 import {Log} from '../Utils/Log';
 import {PlayerController} from "./PlayerController";
+import {RoomController} from "./RoomController";
+import {Key} from "./Items/Key";
+
+export type InteractionResult = {
+	message: string;
+}
+
+export type InteractionCallback = (room: RoomController, player: PlayerController) => InteractionResult;
+
+export type PropInteractionMap = Record<Capitalize<string>, InteractionCallback>;
 
 export class Entity {
 
@@ -46,28 +56,38 @@ export class Entity {
 	}
 }
 
-// bad name, I know, but "object" is taken in JS
 export class Prop {
 
 	name: string;
 	description: string;
-	availableActions: string[];
+	contents: Item[];
+	actions: PropInteractionMap;
 
-	constructor(name: string, description: string, additionalActions?: string[]) {
+	constructor(name: string, description: string, contents?: Item[], additionalActions?: PropInteractionMap) {
 		this.name = name;
 		this.description = description;
-		const actionsSet = new Set( ['examine'].concat(additionalActions || []) );
-		this.availableActions = Array.from(actionsSet);
+		this.contents = contents ?? [];
+		this.actions = {};
+
+		// setup default actions
+		this.actions['Examine'] = (room, player) => {
+			return { message: this.description };
+		};
 	}
 
-	interact(player: PlayerController, action: string) {
-		if (action === 'examine') {
-			return this.description;
+	get availableActions(): Capitalize<string>[] {
+		return Object.keys(this.actions) as Capitalize<string>[];
+	}
+
+	interact(room: RoomController, player: PlayerController, action: Capitalize<string>) {
+		// check if action is defined
+		if (action in this.actions) {
+			return this.actions[action as Capitalize<string>](room, player);
 		}
 
 		// default unhandled action
-		Log('ERROR', `Unhandled interaction action "${action}" on obstacle "${this.name}".`);
-		return `You can't ${action} the ${this.name}.`;
+		Log('ERROR', `Unhandled interaction action "${action}" on prop "${this.name}".`);
+		return { message: `You can't ${action} the ${this.name}.` };
 	}
 }
 
@@ -76,12 +96,36 @@ export class Item {
 	description: string;
 	weight: number;
 	count: number;
+	actions: PropInteractionMap;
 
-	constructor(name: string, description: string, weight: number, count?: number) {
+	constructor(
+		name: string,
+		description: string,
+		weight: number,
+		count: number,
+		additionalActions?: PropInteractionMap
+	) {
 		this.name        = name;
 		this.description = description;
 		this.weight      = weight || 0;
 		this.count       = count  || 1;
+		this.actions     = {
+			'Examine': (room, player) => {
+				return { message: this.description };
+			},
+			... additionalActions
+		};
+	}
+
+	interact(room: RoomController, player: PlayerController, action: Capitalize<string>): InteractionResult {
+		// check if action is defined
+		if (action in this.actions) {
+			return this.actions[action as Capitalize<string>](room, player);
+		}
+
+		// default unhandled action
+		Log('ERROR', `Unhandled interaction action "${action}" on item "${this.name}".`);
+		return { message: `You can't ${action} the ${this.name}.` };
 	}
 
 	use(target: unknown) {
