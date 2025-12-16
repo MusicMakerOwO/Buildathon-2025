@@ -1,5 +1,6 @@
 import {Room} from "../Room";
 import {Candle, Crack} from "../GameObjects";
+import {Key} from "../Items";
 
 export class Dungeon extends Room {
 	constructor() {
@@ -10,7 +11,7 @@ A single flickering lantern hangs from a rusty chain in the center of the room, 
 In one corner, you notice a narrow crack in the wall, just wide enough to fit your hand inside.
 `.trim(),
 			[Crack, Candle],
-			[]
+			[Key]
 		);
 	}
 }
