@@ -35,6 +35,10 @@ This means that both the [Action Select] and [Object Select] views are ephemeral
 user input before re-rendering the main [Game View]. Hope this clears it up, this is kind of tricky to explain in text.
  */
 
+function Capitalize<S extends string>(str: S): Capitalize<S> {
+	return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<S>;
+}
+
 export default {
 	customID: 'dungeon-view',
 	async execute(interaction, client, args) {
@@ -56,30 +60,35 @@ export default {
 			return;
 		}
 
-		let [ action, obstacle ] = args;
-		if (action === 'null') action = '';
-		if (obstacle === 'null') obstacle = '';
+		let action   = args[0] === 'null' ? null : Capitalize(args[0] || '');
+		let propName = args[1] === 'null' ? null : Capitalize(args[1] || '');
 
-		if (action === 'inventory') {
+		if (action === 'Inventory') {
 			game.instance.addBlankLog();
-			game.instance.handleInteraction('inventory', '');
+			game.instance.interact('Inventory', '');
 
 			// consume action after processing
-			action = '';
-		} else if (action && obstacle) {
+			action = null;
+		} else if (action && propName) {
 			game.instance.addBlankLog();
-			game.instance.handleInteraction(action, obstacle);
+			game.instance.interact(action, propName);
 			// reset log offset to show latest logs
 			game.logOffset = 0;
 
-			// consume action and obstacle after processing
-			action = '';
-			obstacle = '';
+			// consume action and prop after processing
+			action = null;
+			propName = null;
 		}
 
 		const logsToDisplay = game.instance.logs.slice( - (game.logOffset + LOGS_PER_PAGE), - game.logOffset || undefined);
-
 		const logMessage = logsToDisplay.length > 0 ? logsToDisplay.join('\n') : '[ SOMETHING WENT WRONG ]';
+
+		// getter
+		const availableActions = game.instance.availableActions;
+		if (!availableActions) {
+			// only returns null if game is over
+			throw new Error('No available actions, is the game over?');
+		}
 
 		const embed = {
 			title: 'Game Log',
@@ -98,14 +107,14 @@ ${logMessage}
 					type: 2,
 					style: 1,
 					label: '⬆️ Scroll Up',
-					custom_id: `dungeon-scroll_up_${gameKey}_${action || ''}_${obstacle || ''}`,
+					custom_id: `dungeon-scroll_up_${gameKey}_${action || ''}_${propName || ''}`,
 					disabled: game.logOffset + LOGS_PER_PAGE >= game.instance.logs.length
 				},
 				{
 					type: 2,
 					style: 1,
 					label: '⬇️ Scroll Down',
-					custom_id: `dungeon-scroll_down_${gameKey}_${action || ''}_${obstacle || ''}`,
+					custom_id: `dungeon-scroll_down_${gameKey}_${action || ''}_${propName || ''}`,
 					disabled: game.logOffset === 0
 				}
 			]
@@ -116,12 +125,9 @@ ${logMessage}
 			components: [
 				{
 					type: 3,
-					custom_id: `dungeon-actionselect_${gameKey}_${obstacle || ''}`,
+					custom_id: `dungeon-actionselect_${gameKey}_${propName || ''}`,
 					placeholder: 'Choose an action ...',
-					options: game.instance.listAvailableActions().map(act => ({
-						label: act,
-						value: act
-					})),
+					options: [] as Array<{label: string, value: string}>,
 					disabled: false
 				}
 			]
@@ -134,21 +140,36 @@ ${logMessage}
 					type: 3,
 					custom_id: `dungeon-obstacleselect_${gameKey}_${action || ''}`,
 					placeholder: 'Choose an object ...',
-					options: game.instance.listObstacles().map(obj => ({
-						label: obj,
-						value: obj
-					})),
+					options: [] as Array<{label: string, value: string}>,
 					disabled: false
 				}
 			]
 		};
 
-		if (action || obstacle) {
+		const actionOptions = new Set<string>();
+		const objectOptions = new Set<string>();
+		for (const [action, propList] of Object.entries(availableActions)) {
+			actionOptions.add(action);
+			for (const prop of propList) {
+				objectOptions.add(prop.name);
+			}
+		}
+
+		actionSelection.components[0].options = Array.from(actionOptions).map(act => ({
+			label: act,
+			value: act
+		}));
+		objectSelection.components[0].options = Array.from(objectOptions).map(obj => ({
+			label: obj,
+			value: obj
+		}));
+
+		if (action || propName) {
 			if (action) {
 				actionSelection.components[0].placeholder = action;
 
 				// only display objects that support the selected action
-				const possibleObjects = game.instance.getObstaclesForAction(action);
+				const possibleObjects = availableActions[action] || [];
 				objectSelection.components[0].options.length = 0; // clear existing options
 				for (const obj of possibleObjects) {
 					objectSelection.components[0].options.push({
@@ -157,11 +178,18 @@ ${logMessage}
 					});
 				}
 			}
-			if (obstacle) {
-				objectSelection.components[0].placeholder = obstacle;
+			if (propName) {
+				objectSelection.components[0].placeholder = propName;
 				// only display actions that can be performed on the selected object
-				const possibleActions = game.instance.getActionsForObstacle(obstacle);
-				actionSelection.components[0].options.length = 0; // clear existing options
+				const possibleActions = new Set<string>();
+				for (const [act, propList] of Object.entries(availableActions)) {
+					for (const prop of propList) {
+						if (prop.name === propName) {
+							possibleActions.add(act);
+						}
+					}
+				}
+				actionSelection.components[0].options.length = 0;
 				for (const act of possibleActions) {
 					actionSelection.components[0].options.push({
 						label: act,
@@ -188,6 +216,7 @@ ${logMessage}
 			}
 		}
 
+		// check game state after processing
 		if (game.instance.gameOver) {
 			await interaction.editReply({
 				embeds: [{
