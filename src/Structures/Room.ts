@@ -3,7 +3,7 @@ import {Key} from "./Items";
 import {PlayerController} from "./PlayerController";
 import {InteractionResult, Item, Prop, PropPositions} from "./CoreStructs";
 
-const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Grab', 'Examine'] as const;
+const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Examine'] as const;
 
 class FloorProp extends Prop {
 	constructor() {
