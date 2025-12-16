@@ -41,8 +41,9 @@ export class GameController {
 	gameOver: boolean;
 	roomsCleared: number;
 	currentRoom: Room | null;
+	roomCount: number;
 
-	constructor(theme: ObjectValues<typeof THEMES>, roomCount = 5) {
+	constructor(theme: ObjectValues<typeof THEMES>, roomCount: number) {
 		this.possibleRooms = ROOMS_BY_THEME[theme];
 		if (!this.possibleRooms || this.possibleRooms.length === 0) {
 			throw new Error(`Invalid theme: ${theme}, no rooms available`);
@@ -55,6 +56,7 @@ export class GameController {
 		// inventory management
 		this.player = new PlayerController();
 
+		this.roomCount = roomCount;
 		this.roomsCleared = 0;
 		this.currentRoom = new tutorialRoomClass();
 
@@ -87,7 +89,7 @@ export class GameController {
 		this.roomsCleared += 1;
 
 		// check if we have cleared enough rooms to end the game
-		if (this.roomsCleared >= 5) {
+		if (this.roomsCleared >= this.roomCount) {
 			this.currentRoom = null; // signifies game over
 			return;
 		}
