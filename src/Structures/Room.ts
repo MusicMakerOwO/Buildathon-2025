@@ -10,7 +10,8 @@ class FloorProp extends Prop {
 		super(
 			'Floor',
 			'A dusty old floor. Nothing special about it.',
-			PropPositions.FLOOR
+			PropPositions.FLOOR,
+			'You spot something glinting in the corner.',
 		);
 	}
 }

@@ -9,10 +9,12 @@ export class LockableProp extends Prop {
 		name: string,
 		description: string,
 		position: ObjectValues<typeof PropPositions>,
+		itemPickupMessage: string | undefined,
 		isLocked: boolean,
+		additionalActions?: PropInteractionMap
 	) {
 
-		const additionalActions: PropInteractionMap = {
+		const actions: PropInteractionMap = {
 			Open: (room, player) => {
 				if (this.contents.length === 0) {
 					return { message: `You open the ${this.name}, but find nothing of interest.` };
@@ -30,7 +32,7 @@ export class LockableProp extends Prop {
 		};
 
 		if (isLocked) {
-			additionalActions['Unlock'] = (room, player) => {
+			actions['Unlock'] = (room, player) => {
 				if (player.hasItem(Key) !== false) {
 					player.removeItem(Key, 1);
 					this.isLocked = false;
@@ -45,7 +47,8 @@ export class LockableProp extends Prop {
 			name,
 			description,
 			position,
-			additionalActions
+			itemPickupMessage,
+			Object.assign(actions, additionalActions)
 		);
 
 		this.isLocked = Boolean(isLocked);

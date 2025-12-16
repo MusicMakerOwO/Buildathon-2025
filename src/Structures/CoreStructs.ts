@@ -75,11 +75,13 @@ export class Prop {
 	contents: Item[];
 	actions: PropInteractionMap;
 	position: ObjectValues<typeof PropPositions>;
+	itemPickupMessage: string | undefined;
 
 	constructor(
 		name: string,
 		description: string,
 		position: ObjectValues<typeof PropPositions>,
+		itemPickupMessage: string | undefined,
 		additionalActions?: PropInteractionMap
 	) {
 		this.name = name;
@@ -120,9 +122,17 @@ export class Prop {
 		}
 
 		this.contents = [];
+		this.itemPickupMessage = itemPickupMessage;
+	}
+
+	get canHoldItems(): boolean {
+		return this.itemPickupMessage !== undefined;
 	}
 
 	addItem(item: Item) {
+		if (!this.canHoldItems) {
+			throw new Error(`Prop "${this.name}" cannot hold items. Make sure you set an itemPickupMessage when creating it.`);
+		}
 		const existingIndex = this.contents.findIndex(existingItem => existingItem.constructor === item.constructor);
 		if (existingIndex !== -1) {
 			this.contents[existingIndex].count += item.count;
