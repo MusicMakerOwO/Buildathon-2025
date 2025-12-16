@@ -1,4 +1,5 @@
-import {Prop, Item, LockableProp, PropPositions} from "./CoreStructs";
+import {Prop, Item, PropPositions} from "./CoreStructs";
+import {LockableProp} from "./LockableProp";
 
 export class Bench extends Prop {
 	constructor() {
