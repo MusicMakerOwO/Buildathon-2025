@@ -6,12 +6,11 @@ import {InteractionResult, Item, Prop, PropPositions} from "./CoreStructs";
 const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Grab', 'Examine'] as const;
 
 class FloorProp extends Prop {
-	constructor(items: Item[]) {
+	constructor() {
 		super(
 			'Floor',
 			'A dusty old floor. Nothing special about it.',
-			PropPositions.FLOOR,
-			items
+			PropPositions.FLOOR
 		);
 	}
 }
@@ -55,7 +54,11 @@ export class Room {
 				existingItem.count += itemInstance.count;
 			}
 		}
-		this.props.set(FloorProp, new FloorProp( Array.from(itemList.values()) ));
+		const floorInstance = new FloorProp();
+		for (const itemInstance of itemList.values()) {
+			floorInstance.addItem(itemInstance);
+		}
+		this.props.set(FloorProp, floorInstance);
 	}
 
 	/**

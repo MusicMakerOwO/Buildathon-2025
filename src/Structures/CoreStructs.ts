@@ -80,13 +80,11 @@ export class Prop {
 		name: string,
 		description: string,
 		position: ObjectValues<typeof PropPositions>,
-		contents?: Item[],
 		additionalActions?: PropInteractionMap
 	) {
 		this.name = name;
 		this.description = description;
 		this.position = position;
-		this.contents = contents ?? [];
 		this.actions = {
 			'Examine': (room, player) => {
 				if (this.contents.length === 0) {
@@ -119,6 +117,17 @@ export class Prop {
 				}
 			},
 			... additionalActions
+		}
+
+		this.contents = [];
+	}
+
+	addItem(item: Item) {
+		const existingIndex = this.contents.findIndex(existingItem => existingItem.constructor === item.constructor);
+		if (existingIndex !== -1) {
+			this.contents[existingIndex].count += item.count;
+		} else {
+			this.contents.push(item);
 		}
 	}
 

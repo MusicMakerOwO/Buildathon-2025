@@ -1,4 +1,4 @@
-import {Prop, Item, PropPositions} from "./CoreStructs";
+import {Prop, PropPositions} from "./CoreStructs";
 import {LockableProp} from "./LockableProp";
 
 export class Bench extends Prop {
@@ -11,14 +11,13 @@ export class Bench extends Prop {
 	}
 }
 export class WoodStove extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		isLocked = false;
 		super(
 			'Wood Stove',
 			'An old-fashioned wood stove with a small oven compartment below the burners.',
 			PropPositions.ROOM,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -58,14 +57,13 @@ export class WallMount extends Prop {
 }
 
 export class ToolBox extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		isLocked = false;
 		super(
 			'Tool Box',
 			'A metal toolbox with a stiff handle. The latch looks a bit rusty but it should open fine.',
 			PropPositions.FLOOR,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -107,12 +105,11 @@ export class StorageFurniture extends LockableProp {
 		]
 	]
 
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			... StorageFurniture.RANDOM_OPTIONS[ Math.floor(Math.random() * StorageFurniture.RANDOM_OPTIONS.length) ],
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -157,13 +154,12 @@ export class StaticFurniture extends Prop {
 }
 
 export class SpecimenLocker extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Specimen Locker',
 			'A tall, temperature-controlled locker containing labeled sample containers.',
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -199,13 +195,12 @@ export class Shackles extends Prop {
 }
 
 export class Safe extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Safe',
 			'A heavy metal safe with little bits of rust along the edges. Its dial sticks slightly when turned but it refuses to open.',
 			PropPositions.FLOOR,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -260,13 +255,12 @@ export class ObservationWindow extends Prop {
 }
 
 export class Locker extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Locker',
 			'A tall metal locker with a combination lock on the door.',
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -330,15 +324,12 @@ export class FrostedWindow extends Prop {
 }
 
 export class Dresser extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Dresser',
-			contents.length > 0
-				? 'An old wooden dresser with several drawers. It seems one of the drawers is slightly ajar, revealing some items inside.'
-				: 'An old wooden dresser with several drawers. All of the drawers seem to be stuck and cannot be opened.',
+			'An old wooden dresser with several drawers. The surface is dusty and worn and the drawers creak when opened.',
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -363,26 +354,24 @@ export class Desk extends Prop {
 }
 
 export class Crate extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Crate',
 			'A heavy crate marked with faded symbols. The wood is weathered and aged from years of use.',
 			PropPositions.FLOOR,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
 
 export class Crack extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		isLocked = false;
 		super(
 			'Crack',
 			'A narrow crack in the wall, just wide enough to slip something small inside.',
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -398,13 +387,12 @@ export class CollapsedVent extends Prop {
 }
 
 export class ColdStorageUnit extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Cold Storage Unit',
 			'A frost-covered storage unit. The door seal crackles with ice.',
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
@@ -448,25 +436,23 @@ export class GrandfatherClock extends Prop {
 }
 
 export class Chest extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Chest',
 			'A sturdy wooden chest reinforced with iron bands.',
 			PropPositions.FLOOR,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }
 
 export class ChemicalCabinet extends LockableProp {
-	constructor(isLocked: boolean, contents: Item[]) {
+	constructor(isLocked: boolean) {
 		super(
 			'Chemical Cabinet',
 			'A heavy steel cabinet meant for storing hazardous chemicals. A greenish-yellow liquid slowly drips from a small crack in the door and sizzles as it hits the floor.',
 			PropPositions.WALL,
-			isLocked,
-			contents
+			isLocked
 		);
 	}
 }

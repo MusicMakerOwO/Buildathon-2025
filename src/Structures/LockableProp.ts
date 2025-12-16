@@ -1,6 +1,6 @@
 import {ObjectValues} from "../Typings/Helpers";
 import {Key} from "./Items";
-import {Item, Prop, PropInteractionMap, PropPositions} from "./CoreStructs";
+import {Prop, PropInteractionMap, PropPositions} from "./CoreStructs";
 
 export class LockableProp extends Prop {
 	isLocked: boolean;
@@ -10,7 +10,6 @@ export class LockableProp extends Prop {
 		description: string,
 		position: ObjectValues<typeof PropPositions>,
 		isLocked: boolean,
-		contents: Item[]
 	) {
 
 		const additionalActions: PropInteractionMap = {
@@ -46,7 +45,6 @@ export class LockableProp extends Prop {
 			name,
 			description,
 			position,
-			contents,
 			additionalActions
 		);
 
