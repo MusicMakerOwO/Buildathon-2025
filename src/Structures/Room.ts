@@ -36,18 +36,20 @@ export class Room {
 
 	#InitializeProps(props: Class<Prop>[], items: Class<Item>[]) {
 
-		// select 1 prop randomly to contain a key item
-		const randomIndex = Math.floor(Math.random() * props.length);
+		const propInstances = props.map(PropClass => new PropClass());
+
+		let randomIndex: number;
+		do {
+			randomIndex = Math.floor(Math.random() * props.length);
+		} while (propInstances[randomIndex].canHoldItems);
+
 		const keyItem = new Key();
-		for (let i = 0; i < props.length; i++) {
-			const PropClass = props[i];
-			const propInstance = new PropClass();
-			if (i === randomIndex) {
-				// add key item to this prop's contents
-				propInstance.addItem(keyItem);
-			}
-			this.props.set(PropClass, propInstance); // class -> instance
+		propInstances[randomIndex].addItem(keyItem);
+
+		for (const propInstance of propInstances) {
+			this.props.set(propInstance.constructor as Class<Prop>, propInstance);
 		}
+
 		const itemList = new Map();
 		for (const ItemClass of items) {
 			const itemInstance = new ItemClass();
