@@ -2,9 +2,9 @@ import {InteractionResult, Item} from "./CoreStructs";
 import {Crowbar, Key, LockPick} from "./Items";
 import {Class} from "../Typings/Helpers";
 import {PlayerController} from "./PlayerController";
-import {RoomController} from "./RoomController";
+import {Room} from "./Room";
 
-type TransitionPropCallback = (room: RoomController, player: PlayerController, itemUsed?: Item) => InteractionResult;
+type TransitionPropCallback = (room: Room, player: PlayerController, itemUsed?: Item) => InteractionResult;
 type TransitionPropInteractionMap = Record<Capitalize<string>, TransitionPropCallback>;
 
 type UnlockItemInfo = {
@@ -93,7 +93,7 @@ export class TransitionProp {
 		}
 	}
 
-	interact(room: RoomController, player: PlayerController, action: Capitalize<string>): InteractionResult {
+	interact(room: Room, player: PlayerController, action: Capitalize<string>): InteractionResult {
 		if (action in this.actions) {
 			return this.actions[action as Capitalize<string>](room, player);
 		}
@@ -102,7 +102,7 @@ export class TransitionProp {
 		return { message: `You can't ${action} the ${this.name}.` };
 	}
 
-	useItem(room: RoomController, player: PlayerController, item: Item): InteractionResult {
+	useItem(room: Room, player: PlayerController, item: Item): InteractionResult {
 		if (this.isLocked && 'Unlock' in this.actions) {
 			return this.actions['Unlock'](room, player, item);
 		}

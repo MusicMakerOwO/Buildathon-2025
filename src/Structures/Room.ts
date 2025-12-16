@@ -16,7 +16,7 @@ class FloorProp extends Prop {
 	}
 }
 
-export class RoomController {
+export class Room {
 
 	description: string;
 	items: Map<Class<Item>, Item>;

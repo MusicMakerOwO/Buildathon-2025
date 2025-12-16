@@ -1,6 +1,6 @@
 import {Log} from '../Utils/Log';
 import {PlayerController} from "./PlayerController";
-import {RoomController} from "./RoomController";
+import {Room} from "./Room";
 import {Key} from "./Items";
 import {ObjectValues} from "../Typings/Helpers";
 
@@ -21,7 +21,7 @@ export type InteractionResult = {
 	nextRoom?: boolean;
 }
 
-export type InteractionCallback = (room: RoomController, player: PlayerController) => InteractionResult;
+export type InteractionCallback = (room: Room, player: PlayerController) => InteractionResult;
 export type PropInteractionMap = Record<Capitalize<string>, InteractionCallback>;
 
 export class Entity {
@@ -131,7 +131,7 @@ export class Prop {
 		return Object.keys(this.actions) as Capitalize<string>[];
 	}
 
-	interact(room: RoomController, player: PlayerController, action: Capitalize<string>) {
+	interact(room: Room, player: PlayerController, action: Capitalize<string>) {
 		// check if action is defined
 		if (action in this.actions) {
 			return this.actions[action as Capitalize<string>](room, player);
@@ -221,7 +221,7 @@ export class Item {
 		};
 	}
 
-	interact(room: RoomController, player: PlayerController, action: Capitalize<string>): InteractionResult {
+	interact(room: Room, player: PlayerController, action: Capitalize<string>): InteractionResult {
 		// check if action is defined
 		if (action in this.actions) {
 			return this.actions[action as Capitalize<string>](room, player);
@@ -233,7 +233,7 @@ export class Item {
 	}
 
 	// Override on children
-	use(target: RoomController | PlayerController | Prop): InteractionResult {
+	use(target: Room | PlayerController | Prop): InteractionResult {
 		return { message: `You can't use the ${this.name}.` };
 	}
 

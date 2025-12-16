@@ -1,5 +1,5 @@
 import {InteractionResult, Item, Prop} from "./CoreStructs";
-import {RoomController} from "./RoomController";
+import {Room} from "./Room";
 
 //////////////////////////
 // Keys and Tools
@@ -49,7 +49,7 @@ export class Journal extends Item {
 		super('Journal', 'An old leather-bound journal filled with handwritten notes and sketches.', 0.5, 1);
 	}
 
-	use(target: RoomController): InteractionResult {
+	use(target: Room): InteractionResult {
 		// TODO: stabilize the room's environment to prevent modifications
 		throw new Error("Method not implemented.");
 	}

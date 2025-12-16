@@ -1,6 +1,6 @@
 import {Dungeon} from "./TutorialRooms/Dungeon";
 import {Class, ObjectValues} from "../Typings/Helpers";
-import {RoomController} from "./RoomController";
+import {Room} from "./Room";
 import {PlayerController} from "./PlayerController";
 import {MessHall} from "./Rooms/Dungeon/MessHall";
 import {TortureChamber} from "./Rooms/Dungeon/TortureChamber";
@@ -13,14 +13,14 @@ export const THEMES = {
 	SnowyCabin: 'snowy_cabin'
 } as const;
 
-const TUTORIAL_ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Class<RoomController> | null> = {
+const TUTORIAL_ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Class<Room> | null> = {
 	[THEMES.Dungeon]: Dungeon,
 	[THEMES.HauntedHouse]: null, // coming soon
 	[THEMES.AbandonedLab]: null,
 	[THEMES.SnowyCabin]: null
 }
 
-const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<RoomController>>> = {
+const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<Room>>> = {
 	[THEMES.Dungeon]: [
 		TortureChamber,
 		MessHall,
@@ -35,12 +35,12 @@ const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<RoomContro
 
 export class GameController {
 
-	possibleRooms: Array<Class<RoomController>>;
+	possibleRooms: Array<Class<Room>>;
 	player: PlayerController;
 	logs: string[];
 	gameOver: boolean;
 	roomsCleared: number;
-	currentRoom: RoomController | null;
+	currentRoom: Room | null;
 
 	constructor(theme: ObjectValues<typeof THEMES>, roomCount = 5) {
 		this.possibleRooms = ROOMS_BY_THEME[theme];
@@ -93,7 +93,7 @@ export class GameController {
 		}
 
 		// pick a new random room, do not repeat the same room consecutively
-		let nextRoomClass: Class<RoomController>;
+		let nextRoomClass: Class<Room>;
 		do {
 			const randomIndex = Math.floor(Math.random() * this.possibleRooms.length);
 			nextRoomClass = this.possibleRooms[randomIndex];

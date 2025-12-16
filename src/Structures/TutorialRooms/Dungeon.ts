@@ -1,7 +1,7 @@
-import {RoomController} from "../RoomController";
+import {Room} from "../Room";
 import {Candle, Crack} from "../GameObjects";
 
-export class Dungeon extends RoomController {
+export class Dungeon extends Room {
 	constructor() {
 		super(`
 You wake up in a dimly lit dungeon room. The cold stone walls are damp to the touch, and the air is thick with the scent of moss and mildew. \

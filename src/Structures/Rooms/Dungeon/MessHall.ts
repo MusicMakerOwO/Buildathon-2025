@@ -1,7 +1,7 @@
-import {RoomController} from "../../RoomController";
+import {Room} from "../../Room";
 import {Bench, Chest, Crate, Lantern, Table} from "../../GameObjects";
 
-export class MessHall extends RoomController {
+export class MessHall extends Room {
 	constructor() {
 		super(`
 Tables and benches are arranged in neat rows. \

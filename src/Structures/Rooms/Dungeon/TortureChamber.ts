@@ -1,7 +1,7 @@
-import {RoomController} from "../../RoomController";
+import {Room} from "../../Room";
 import {BloodStains, Chest, IronMaiden, Locker, RustedChains} from "../../GameObjects";
 
-export class TortureChamber extends RoomController {
+export class TortureChamber extends Room {
 	constructor() {
 		super(`
 The air is thick with the scent of rust and decay. \
