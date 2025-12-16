@@ -2,6 +2,18 @@ import {Log} from '../Utils/Log';
 import {PlayerController} from "./PlayerController";
 import {RoomController} from "./RoomController";
 import {Key} from "./Items";
+import {ObjectValues} from "../Typings/Helpers";
+
+export const PropPositions = {
+	/** The object is either in the middle of the room (furniture) or spans floor to ceiling (pillars) */
+	ROOM: 0,
+	/** Usually smaller objects located on the floor, like rugs or floorboards */
+	FLOOR: 1,
+	/** Objects attached to or part of the walls, like paintings or shelves */
+	WALL: 2,
+	/** Objects that are attached or hanging from the ceiling, ie chandeliers */
+	CEILING: 3
+} as const;
 
 export type InteractionResult = {
 	message: string;
@@ -63,10 +75,18 @@ export class Prop {
 	description: string;
 	contents: Item[];
 	actions: PropInteractionMap;
+	position: ObjectValues<typeof PropPositions>;
 
-	constructor(name: string, description: string, contents?: Item[], additionalActions?: PropInteractionMap) {
+	constructor(
+		name: string,
+		description: string,
+		position: ObjectValues<typeof PropPositions>,
+		contents?: Item[],
+		additionalActions?: PropInteractionMap
+	) {
 		this.name = name;
 		this.description = description;
+		this.position = position;
 		this.contents = contents ?? [];
 		this.actions = {
 			'Examine': (room, player) => {
@@ -129,6 +149,7 @@ export class LockableProp extends Prop {
 	constructor(
 		name: string,
 		description: string,
+		position: ObjectValues<typeof PropPositions>,
 		isLocked: boolean,
 		contents: Item[]
 	) {
@@ -165,6 +186,7 @@ export class LockableProp extends Prop {
 		super(
 			name,
 			description,
+			position,
 			contents,
 			additionalActions
 		);

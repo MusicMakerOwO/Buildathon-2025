@@ -1,10 +1,11 @@
-import {Prop, Item, LockableProp} from "./CoreStructs";
+import {Prop, Item, LockableProp, PropPositions} from "./CoreStructs";
 
 export class Bench extends Prop {
 	constructor() {
 		super(
 			'Bench',
 			'A sturdy wooden bench, worn smooth from years of use.',
+			PropPositions.ROOM
 		);
 	}
 }
@@ -14,6 +15,7 @@ export class WoodStove extends LockableProp {
 		super(
 			'Wood Stove',
 			'An old-fashioned wood stove with a small oven compartment below the burners.',
+			PropPositions.ROOM,
 			isLocked,
 			contents
 		);
@@ -48,7 +50,8 @@ export class WallMount extends Prop {
 
 	constructor() {
 		super(
-			... WallMount.RANDOM_OPTIONS[ Math.floor(Math.random() * WallMount.RANDOM_OPTIONS.length) ]
+			... WallMount.RANDOM_OPTIONS[ Math.floor(Math.random() * WallMount.RANDOM_OPTIONS.length) ],
+			PropPositions.WALL
 		);
 	}
 }
@@ -59,6 +62,7 @@ export class ToolBox extends LockableProp {
 		super(
 			'Tool Box',
 			'A metal toolbox with a stiff handle. The latch looks a bit rusty but it should open fine.',
+			PropPositions.FLOOR,
 			isLocked,
 			contents
 		);
@@ -70,6 +74,7 @@ export class Table extends Prop {
 		super(
 			'Table',
 			'A sturdy wooden table, scarred from years of use. It looks like it could support a fair amount of weight.',
+			PropPositions.ROOM
 		);
 	}
 }
@@ -104,6 +109,7 @@ export class StorageFurniture extends LockableProp {
 	constructor(isLocked: boolean, contents: Item[]) {
 		super(
 			... StorageFurniture.RANDOM_OPTIONS[ Math.floor(Math.random() * StorageFurniture.RANDOM_OPTIONS.length) ],
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -144,6 +150,7 @@ export class StaticFurniture extends Prop {
 	constructor() {
 		super(
 			... StaticFurniture.RANDOM_OPTIONS[ Math.floor(Math.random() * StaticFurniture.RANDOM_OPTIONS.length) ],
+			PropPositions.ROOM
 		);
 	}
 }
@@ -153,6 +160,7 @@ export class SpecimenLocker extends LockableProp {
 		super(
 			'Specimen Locker',
 			'A tall, temperature-controlled locker containing labeled sample containers.',
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -164,6 +172,7 @@ export class SnowdriftBlockage extends Prop {
 		super(
 			'Snowdrift Blockage',
 			'A mound of packed snow blocking part of the room. Cold air seeps through a nearby window making the snow hard and icy.',
+			PropPositions.ROOM
 		);
 	}
 }
@@ -173,6 +182,7 @@ export class ShatteredControlPanel extends Prop {
 		super(
 			'Shattered Control Panel',
 			'A control panel with its screen cracked and buttons missing. Sparks occasionally fly from exposed wiring.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -182,6 +192,7 @@ export class Shackles extends Prop {
 		super(
 			'Shackles',
 			'Metal shackles bolted to the wall. Long abandoned, yet unsettling.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -191,6 +202,7 @@ export class Safe extends LockableProp {
 		super(
 			'Safe',
 			'A heavy metal safe with little bits of rust along the edges. Its dial sticks slightly when turned but it refuses to open.',
+			PropPositions.FLOOR,
 			isLocked,
 			contents
 		);
@@ -202,6 +214,7 @@ export class RustedChains extends Prop {
 		super(
 			'Rusted Chains',
 			'Old chains hang from the wall, rattling slightly when touched.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -230,6 +243,7 @@ export class Painting extends Prop {
 		super(
 			'Painting',
 			Painting.RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * Painting.RANDOM_DESCRIPTIONS.length) ],
+			PropPositions.WALL
 		);
 	}
 }
@@ -239,6 +253,7 @@ export class ObservationWindow extends Prop {
 		super(
 			'Observation Window',
 			'A reinforced glass window looking into a sealed chamber. A series of cracks run along it like a spiderweb.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -248,6 +263,7 @@ export class Locker extends LockableProp {
 		super(
 			'Locker',
 			'A tall metal locker with a combination lock on the door.',
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -267,6 +283,7 @@ export class Lantern extends Prop {
 		super(
 			'Lantern',
 			Lantern.RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * Lantern.RANDOM_DESCRIPTIONS.length) ],
+			PropPositions.WALL
 		);
 	}
 }
@@ -276,6 +293,7 @@ export class IronMaiden extends Prop {
 		super(
 			'Iron Maiden',
 			'A terrifying iron maiden stands in the corner, its spiked interior ready to ensnare any unfortunate soul.',
+			PropPositions.ROOM
 		);
 	}
 }
@@ -285,6 +303,7 @@ export class IronBars extends Prop {
 		super(
 			'Iron Bars',
 			'A set of sturdy iron bars, forming a partial barrier within the room. I wonder what they were meant to contain.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -294,6 +313,7 @@ export class IcicleCluster extends Prop {
 		super(
 			'Icicle Cluster',
 			'A cluster of long icicles hanging from the ceiling beams.',
+			PropPositions.CEILING
 		);
 	}
 }
@@ -303,6 +323,7 @@ export class FrostedWindow extends Prop {
 		super(
 			'Frosted Window',
 			'A small window completely fogged and frozen over. No light passes through.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -314,6 +335,7 @@ export class Dresser extends LockableProp {
 			contents.length > 0
 				? 'An old wooden dresser with several drawers. It seems one of the drawers is slightly ajar, revealing some items inside.'
 				: 'An old wooden dresser with several drawers. All of the drawers seem to be stuck and cannot be opened.',
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -334,6 +356,7 @@ export class Desk extends Prop {
 		super(
 			'Desk',
 			Desk.RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * Desk.RANDOM_DESCRIPTIONS.length) ],
+			PropPositions.ROOM
 		);
 	}
 }
@@ -343,6 +366,7 @@ export class Crate extends LockableProp {
 		super(
 			'Crate',
 			'A heavy crate marked with faded symbols. The wood is weathered and aged from years of use.',
+			PropPositions.FLOOR,
 			isLocked,
 			contents
 		);
@@ -355,6 +379,7 @@ export class Crack extends LockableProp {
 		super(
 			'Crack',
 			'A narrow crack in the wall, just wide enough to slip something small inside.',
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -366,6 +391,7 @@ export class CollapsedVent extends Prop {
 		super(
 			'Collapsed Vent',
 			'A ventilation shaft that has caved in, scattering dust and twisted metal.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -375,6 +401,7 @@ export class ColdStorageUnit extends LockableProp {
 		super(
 			'Cold Storage Unit',
 			'A frost-covered storage unit. The door seal crackles with ice.',
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -395,6 +422,7 @@ export class WallClock extends Prop {
 		super(
 			'Clock',
 			WallClock.RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * WallClock.RANDOM_DESCRIPTIONS.length) ],
+			PropPositions.WALL
 		);
 	}
 }
@@ -413,6 +441,7 @@ export class GrandfatherClock extends Prop {
 		super(
 			'Grandfather Clock',
 			GrandfatherClock.RANDOM_DESCRIPTIONS[Math.floor(Math.random() * GrandfatherClock.RANDOM_DESCRIPTIONS.length)],
+			PropPositions.WALL
 		);
 	}
 }
@@ -422,6 +451,7 @@ export class Chest extends LockableProp {
 		super(
 			'Chest',
 			'A sturdy wooden chest reinforced with iron bands.',
+			PropPositions.FLOOR,
 			isLocked,
 			contents
 		);
@@ -433,6 +463,7 @@ export class ChemicalCabinet extends LockableProp {
 		super(
 			'Chemical Cabinet',
 			'A heavy steel cabinet meant for storing hazardous chemicals. A greenish-yellow liquid slowly drips from a small crack in the door and sizzles as it hits the floor.',
+			PropPositions.WALL,
 			isLocked,
 			contents
 		);
@@ -443,7 +474,8 @@ export class Candle extends Prop {
 	constructor() {
 		super(
 			'Candle',
-			'A flickering candle mounted on the wall, casting eerie shadows around the room. There is a puddle of melted wax beneath it.'
+			'A flickering candle mounted on the wall, casting eerie shadows around the room. There is a puddle of melted wax beneath it.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -452,7 +484,8 @@ export class BrokenTestTubes extends Prop {
 	constructor() {
 		super(
 			'Broken Test Tubes',
-			'Shattered glass litters the floor. Chemical residue stains the surface.'
+			'Shattered glass litters the floor. Chemical residue stains the surface.',
+			PropPositions.FLOOR
 		);
 	}
 }
@@ -461,7 +494,8 @@ export class Bookshelf extends Prop {
 	constructor() {
 		super(
 			'Bookshelf',
-			'A tall wooden bookshelf filled with dusty old books.'
+			'A tall wooden bookshelf filled with dusty old books.',
+			PropPositions.WALL
 		);
 	}
 }
@@ -471,6 +505,7 @@ export class BloodStains extends Prop {
 		super(
 			'Blood Stains',
 			'Dried blood stains splattered across the floor and wall. I pity whoever met their end here.',
+			PropPositions.WALL
 		);
 	}
 }
