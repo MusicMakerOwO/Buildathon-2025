@@ -11,12 +11,13 @@
 		"build-go": "echo \"Checking for errors ...\" && tsgo --noEmit && echo \"Deleting old data ...\" && rm -rf build && echo \"Compiling scripts ...\" && tsgo -b",
 		"start": "node build/index.js",
 		"linecount": "find . -type f -name '*.ts' -not -path './node_modules/*' -exec wc -l {} + | sort -n -r | head -n 10",
-		"test": "jest"
+		"test": "jest --config jest.config.js"
 	},
 	"devDependencies": {
 		"@jest/globals": "^30.2.0",
 		"@types/better-sqlite3": "^7.6.13",
 		"@types/jest": "^30.0.0",
-		"@types/node": "^22.13.1"
+		"@types/node": "^22.13.1",
+		"jest": "^30.2.0"
 	}
 }
