@@ -40,7 +40,11 @@ export class Room {
 		const keyItem = new Key();
 		for (let i = 0; i < props.length; i++) {
 			const PropClass = props[i];
-			const propInstance: Prop = i === randomIndex ? new PropClass(keyItem) : new PropClass();
+			const propInstance = new PropClass();
+			if (i === randomIndex) {
+				// add key item to this prop's contents
+				propInstance.addItem(keyItem);
+			}
 			this.props.set(PropClass, propInstance); // class -> instance
 		}
 		const itemList = new Map();
