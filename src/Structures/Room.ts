@@ -2,6 +2,7 @@ import {Class} from "../Typings/Helpers";
 import {Key} from "./Items";
 import {PlayerController} from "./PlayerController";
 import {InteractionResult, Item, Prop, PropPositions} from "./CoreStructs";
+import {Door, TransitionProp} from "./TransitionProps";
 
 const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Examine'] as const;
 
@@ -21,33 +22,40 @@ export class Room {
 	description: string;
 	items: Map<Class<Item>, Item>;
 	props: Map<Class<Prop>, Prop>;
+	transitions: Map<Class<TransitionProp>, TransitionProp>;
 	isUnlocked: boolean;
 
-	constructor(description: string, props: Class<Prop>[], items: Class<Item>[]) {
+	constructor(description: string, props: Class<Prop>[], items: Class<Item>[], transitions: Class<TransitionProp>[] = [Door]) {
 		this.description = description;
 		this.items = new Map(); // class -> instance
 		this.props = new Map(); // class -> instance
+		this.transitions = new Map(); // class -> instance
 
 		this.isUnlocked = true;
 
-		this.#InitializeProps(props, items);
+		this.#InitializeProps(transitions, props, items);
 	}
 
 
-	#InitializeProps(props: Class<Prop>[], items: Class<Item>[]) {
+	#InitializeProps(transitions: Class<TransitionProp>[], props: Class<Prop>[], items: Class<Item>[]) {
 
 		const propInstances = props.map(PropClass => new PropClass());
 
 		let randomIndex: number;
 		do {
 			randomIndex = Math.floor(Math.random() * props.length);
-		} while (propInstances[randomIndex].canHoldItems);
+		} while (!propInstances[randomIndex].canHoldItems);
 
 		const keyItem = new Key();
 		propInstances[randomIndex].addItem(keyItem);
 
 		for (const propInstance of propInstances) {
 			this.props.set(propInstance.constructor as Class<Prop>, propInstance);
+		}
+
+		for (const TransitionPropClass of transitions) {
+			const transitionInstance = new TransitionPropClass();
+			this.transitions.set(TransitionPropClass, transitionInstance);
 		}
 
 		const itemList = new Map();
@@ -101,15 +109,26 @@ export class Room {
 			}
 		}
 
+		for (const transition of this.transitions.values()) {
+			if (transition.name.toLowerCase() === propString) {
+				return transition.interact(this, player, action);
+			}
+		}
+
 		// And finally, 404 error
 		return { message: `There is no ${propString} here to interact with.` };
 	}
 
-	resolvePropByName(propName: string): Prop | null {
+	resolvePropByName(propName: string): Prop | TransitionProp | null {
 		propName = String(propName).toLowerCase();
 		for (const prop of this.props.values()) {
 			if (prop.name.toLowerCase() === propName) {
 				return prop;
+			}
+		}
+		for (const transition of this.transitions.values()) {
+			if (transition.name.toLowerCase() === propName) {
+				return transition;
 			}
 		}
 		return null;
@@ -118,8 +137,8 @@ export class Room {
 	/**
 	 * Returns a mapping of all available actions in the room to the props that support them.
 	 */
-	get availableActions(): Record<Capitalize<string>, Prop[]> {
-		const actionMap: Record<Capitalize<string>, Prop[]> = Object.fromEntries(
+	get availableActions(): Record<Capitalize<string>, (Prop | TransitionProp)[]> {
+		const actionMap: Record<Capitalize<string>, (Prop | TransitionProp)[]> = Object.fromEntries(
 			BASE_ACTIONS.map(action => [action, []])
 		);
 		for (const prop of this.props.values()) {
@@ -128,6 +147,15 @@ export class Room {
 					actionMap[action].push(prop);
 				} else {
 					actionMap[action] = [prop];
+				}
+			}
+		}
+		for (const transition of this.transitions.values()) {
+			for (const action of transition.availableActions) {
+				if (action in actionMap) {
+					actionMap[action].push(transition as unknown as Prop);
+				} else {
+					actionMap[action] = [transition as unknown as Prop];
 				}
 			}
 		}

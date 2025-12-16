@@ -93,6 +93,10 @@ export class TransitionProp {
 		}
 	}
 
+	get availableActions(): Capitalize<string>[] {
+		return Object.keys(this.actions) as Capitalize<string>[];
+	}
+
 	interact(room: Room, player: PlayerController, action: Capitalize<string>): InteractionResult {
 		if (action in this.actions) {
 			return this.actions[action as Capitalize<string>](room, player);

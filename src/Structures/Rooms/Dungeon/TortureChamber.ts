@@ -1,5 +1,6 @@
 import {Room} from "../../Room";
 import {BloodStains, Chest, IronMaiden, Locker, RustedChains} from "../../GameObjects";
+import {Door} from "../../TransitionProps";
 
 export class TortureChamber extends Room {
 	constructor() {
@@ -11,7 +12,8 @@ Dried blood splatters the floor and walls, a grim reminder of the suffering that
 You pray that you will not be the next victim in this dreadful place.
 `.trim(),
 			[Chest, Locker, RustedChains, BloodStains, IronMaiden],
-			[]
+			[],
+			[Door]
 		);
 	}
 }

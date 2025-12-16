@@ -5,6 +5,7 @@ import {PlayerController} from "./PlayerController";
 import {MessHall} from "./Rooms/Dungeon/MessHall";
 import {TortureChamber} from "./Rooms/Dungeon/TortureChamber";
 import {Item, Prop} from "./CoreStructs";
+import {TransitionProp} from "./TransitionProps";
 
 export const THEMES = {
 	Dungeon: 'dungeon',
@@ -120,14 +121,14 @@ export class GameController {
 		}
 
 		this.addBlankLog();
-		this.addLog(`You ${action} the ${propString}.`);
+		this.addLog(`You ${action.toLowerCase()} the ${propString}.`);
 
 		const response = this.currentRoom.interact(this.player, action, propString);
 		this.addLog(response.message);
 	}
 
 	// bubble up RoomController methods for convenience and game boundary handling
-	get availableActions(): Record<Capitalize<string>, Prop[]> | null {
+	get availableActions(): Record<Capitalize<string>, (Prop | TransitionProp)[]> | null {
 		if (this.gameOver || this.currentRoom === null) return null;
 		return this.currentRoom.availableActions;
 	}
@@ -137,7 +138,7 @@ export class GameController {
 		return this.currentRoom.itemsOnFloor;
 	}
 
-	resolvePropByName(propName: string): Prop | null {
+	resolvePropByName(propName: string): Prop | TransitionProp | null {
 		if (this.gameOver || this.currentRoom === null) return null;
 		return this.currentRoom.resolvePropByName(propName);
 	}
