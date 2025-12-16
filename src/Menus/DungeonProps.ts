@@ -2,10 +2,10 @@ import { SelectMenuHandler } from '../Typings/HandlerTypes';
 import {ButtonInteraction} from "discord.js";
 
 export default {
-	customID: 'dungeon-obstacleselect',
+	customID: 'dungeon-select-prop',
 	execute: async function (interaction, client, [gamekey, action]) {
-		const selectedObstacle = interaction.values[0];
+		const selectedProp = interaction.values[0];
 		const dungeonView = client.buttons.get('dungeon-view')!;
-		dungeonView.execute(interaction as unknown as ButtonInteraction, client, [gamekey, action, selectedObstacle]);
+		dungeonView.execute(interaction as unknown as ButtonInteraction, client, [gamekey, action, selectedProp]);
 	}
 } as SelectMenuHandler;

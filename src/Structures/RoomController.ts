@@ -1,7 +1,7 @@
 import {Class} from "../Typings/Helpers";
 import {Key} from "./Items";
 import {PlayerController} from "./PlayerController";
-import {InteractionResult, Item, Prop} from "./CoreStructs";
+import {InteractionResult, Item, Prop, PropPositions} from "./CoreStructs";
 
 const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Grab', 'Examine'] as const;
 
@@ -10,6 +10,7 @@ class FloorProp extends Prop {
 		super(
 			'Floor',
 			'A dusty old floor. Nothing special about it.',
+			PropPositions.FLOOR,
 			items
 		);
 	}
@@ -19,13 +20,13 @@ export class RoomController {
 
 	description: string;
 	items: Map<Class<Item>, Item>;
-	obstacles: Map<Class<Prop>, Prop>;
+	props: Map<Class<Prop>, Prop>;
 	isUnlocked: boolean;
 
 	constructor(description: string, props: Class<Prop>[], items: Class<Item>[]) {
 		this.description = description;
-		this.items = new Map(); // Item class -> Item instance
-		this.obstacles = new Map(); // Obstacle class -> Obstacle instance
+		this.items = new Map(); // class -> instance
+		this.props = new Map(); // class -> instance
 
 		this.isUnlocked = true;
 
@@ -41,7 +42,7 @@ export class RoomController {
 		for (let i = 0; i < props.length; i++) {
 			const PropClass = props[i];
 			const propInstance: Prop = i === randomIndex ? new PropClass(keyItem) : new PropClass();
-			this.obstacles.set(PropClass, propInstance); // class -> instance
+			this.props.set(PropClass, propInstance); // class -> instance
 		}
 		const itemList = new Map();
 		for (const ItemClass of items) {
@@ -54,11 +55,11 @@ export class RoomController {
 				existingItem.count += itemInstance.count;
 			}
 		}
-		this.obstacles.set(FloorProp, new FloorProp( Array.from(itemList.values()) ));
+		this.props.set(FloorProp, new FloorProp( Array.from(itemList.values()) ));
 	}
 
 	/**
-	 * Handles player interaction with props in the room (items/obstacles/inventory).
+	 * Handles player interaction with props in the room (items/props/inventory).
 	 */
 	interact(player: PlayerController, action: Capitalize<string>, propString: string): InteractionResult {
 		propString = String(propString).toLowerCase();
@@ -76,10 +77,10 @@ export class RoomController {
 			}
 		}
 
-		// Next check obstacles
-		for (const obstacle of this.obstacles.values()) {
-			if (obstacle.name.toLowerCase() === propString) {
-				return obstacle.interact(this, player, action);
+		// Next check props
+		for (const prop of this.props.values()) {
+			if (prop.name.toLowerCase() === propString) {
+				return prop.interact(this, player, action);
 			}
 		}
 
@@ -96,9 +97,9 @@ export class RoomController {
 
 	resolvePropByName(propName: string): Prop | null {
 		propName = String(propName).toLowerCase();
-		for (const obstacle of this.obstacles.values()) {
-			if (obstacle.name.toLowerCase() === propName) {
-				return obstacle;
+		for (const prop of this.props.values()) {
+			if (prop.name.toLowerCase() === propName) {
+				return prop;
 			}
 		}
 		return null;
@@ -111,12 +112,12 @@ export class RoomController {
 		const actionMap: Record<Capitalize<string>, Prop[]> = Object.fromEntries(
 			BASE_ACTIONS.map(action => [action, []])
 		);
-		for (const obstacle of this.obstacles.values()) {
-			for (const action of obstacle.availableActions) {
+		for (const prop of this.props.values()) {
+			for (const action of prop.availableActions) {
 				if (action in actionMap) {
-					actionMap[action].push(obstacle);
+					actionMap[action].push(prop);
 				} else {
-					actionMap[action] = [obstacle];
+					actionMap[action] = [prop];
 				}
 			}
 		}

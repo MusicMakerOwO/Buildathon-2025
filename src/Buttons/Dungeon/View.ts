@@ -125,7 +125,7 @@ ${logMessage}
 			components: [
 				{
 					type: 3,
-					custom_id: `dungeon-actionselect_${gameKey}_${propName || ''}`,
+					custom_id: `dungeon-select-action_${gameKey}_${propName || ''}`,
 					placeholder: 'Choose an action ...',
 					options: [] as Array<{label: string, value: string}>,
 					disabled: false
@@ -138,7 +138,7 @@ ${logMessage}
 			components: [
 				{
 					type: 3,
-					custom_id: `dungeon-obstacleselect_${gameKey}_${action || ''}`,
+					custom_id: `dungeon-select-prop_${gameKey}_${action || ''}`,
 					placeholder: 'Choose an object ...',
 					options: [] as Array<{label: string, value: string}>,
 					disabled: false

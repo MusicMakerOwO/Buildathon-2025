@@ -9,7 +9,7 @@ export default {
 			await interaction.deferUpdate();
 		}
 
-		const [scrollDirection, gameKey, action, obstacle] = args;
+		const [scrollDirection, gameKey, action, prop] = args;
 
 		const game = client.gameInstances.get( parseInt(gameKey) );
 		if (!game) {
@@ -33,6 +33,6 @@ export default {
 		}
 
 		const dungeonView = client.buttons.get('dungeon-view')!;
-		dungeonView.execute(interaction, client, [gameKey, action, obstacle]);
+		dungeonView.execute(interaction, client, [gameKey, action, prop]);
 	}
 } as ButtonHandler;
