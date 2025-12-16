@@ -102,20 +102,21 @@ export class Prop {
 				if (this.contents.length === 1) {
 					return {
 						message: `
-	${this.description}
-	You spot something inside: ${itemList[0]}.
-	You pick it up and add it to your inventory.
-	`.trim()
+${this.description}
+${this.itemPickupMessage ?? 'You spot an item inside:'}
+- ${itemList[0]}
+You pick it up and add it to your inventory.
+`.trim()
 					};
 				}
 
 				return {
 					message: `
-	${this.description}
-	You spot several items inside:
-	${itemList.map(item => '- ' + item).join('\n')}
-	You pick them up and add them to your inventory.
-	`.trim()
+${this.description}
+${this.itemPickupMessage ?? 'You spot several items inside:'}
+${itemList.map(item => '- ' + item).join('\n')}
+You pick them up and add them to your inventory.
+`.trim()
 				}
 			},
 			... additionalActions

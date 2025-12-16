@@ -378,7 +378,7 @@ export class Desk extends Prop {
 }
 
 export class Crate extends Prop {
-	constructor(isLocked: boolean) {
+	constructor() {
 		super(
 			'Crate',
 			'A heavy crate marked with faded symbols. The wood is weathered and aged from years of use.',
@@ -386,7 +386,7 @@ export class Crate extends Prop {
 			'You pry open the crate and discover:',
 		);
 
-		super.overrideAction('Examine', (room, player) => {
+		super.overrideAction('Examine', () => {
 			return { message: `The crate is nailed shut. You might need something to pry it open.` };
 		});
 
