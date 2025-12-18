@@ -11,19 +11,6 @@ export class Key extends Item {
 	}
 }
 
-export class LockPick extends Item {
-	constructor() {
-		super('Lock Pick', 'A thin piece of metal used to pick locks.', 0.05, 1);
-	}
-}
-
-export class Crowbar extends Item {
-	constructor() {
-		super('Crowbar', 'A sturdy metal crowbar. Useful for prying things open or as a makeshift weapon.', 2.5, 1);
-	}
-}
-
-
 //////////////////////////
 // Information Items
 // These items reveal information in some way

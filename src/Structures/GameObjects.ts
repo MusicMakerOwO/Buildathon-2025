@@ -1,6 +1,5 @@
 import {Prop, PropPositions} from "./CoreStructs";
 import {LockableProp} from "./LockableProp";
-import {Crowbar} from "./Items";
 
 export class Bench extends Prop {
 	constructor() {
@@ -385,25 +384,6 @@ export class Crate extends Prop {
 			PropPositions.FLOOR,
 			'You pry open the crate and discover:',
 		);
-
-		super.overrideAction('Examine', () => {
-			return { message: `The crate is nailed shut. You might need something to pry it open.` };
-		});
-
-		super.overrideAction('Open', (room, player) => {
-			if (!player.hasItem(Crowbar)) {
-				return { message: `The crate is nailed shut. You might need something to pry it open.` };
-			} else {
-				for (let i = 0; i < this.contents.length; i++) {
-					player.addItem(this.contents[i]);
-				}
-				const itemList = this.contents.map(item => item.display).join('\n');
-				this.contents = [];
-				return {
-					message: `Using the crowbar, you pry open the crate and find:\n${itemList}\nThe items have been added to your inventory.`
-				};
-			}
-		});
 	}
 }
 
