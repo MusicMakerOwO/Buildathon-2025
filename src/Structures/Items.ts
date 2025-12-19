@@ -1,7 +1,8 @@
-import {InteractionResult, Item} from "./CoreStructs";
+import {Item} from "./CoreStructs";
 import {Room} from "./Room";
 import {PlayerController} from "./PlayerController";
 import {GameController} from "./GameController";
+import {InteractionResult} from "../Typings/GameTypes";
 
 //////////////////////////
 // Keys and Tools

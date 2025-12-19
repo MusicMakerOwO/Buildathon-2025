@@ -1,8 +1,9 @@
 import {Class} from "../Typings/Helpers";
 import {Key} from "./Items";
 import {PlayerController} from "./PlayerController";
-import {InteractionResult, Item, Prop, PropPositions} from "./CoreStructs";
+import {Item, Prop} from "./CoreStructs";
 import {Door} from "./TransitionProps";
+import {InteractionResult, PropPositions} from "../Typings/GameTypes";
 
 const BASE_ACTIONS: Capitalize<string>[] = ['Inventory', 'Examine'] as const;
 

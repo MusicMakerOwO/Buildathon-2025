@@ -1,5 +1,6 @@
-import {Prop, PropPositions} from "./CoreStructs";
+import {Prop} from "./CoreStructs";
 import {Key} from "./Items";
+import {PropPositions} from "../Typings/GameTypes";
 
 export class Door extends Prop {
 	isLocked: boolean;

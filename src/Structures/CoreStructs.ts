@@ -3,26 +3,7 @@ import {PlayerController} from "./PlayerController";
 import {Room} from "./Room";
 import {ObjectValues} from "../Typings/Helpers";
 import {GameController} from "./GameController";
-
-export const PropPositions = {
-	/** The object is either in the middle of the room (furniture) or spans floor to ceiling (pillars) */
-	ROOM: 0,
-	/** Usually smaller objects located on the floor, like rugs or floorboards */
-	FLOOR: 1,
-	/** Objects attached to or part of the walls, like paintings or shelves */
-	WALL: 2,
-	/** Objects that are attached or hanging from the ceiling, ie chandeliers */
-	CEILING: 3
-} as const;
-
-export type InteractionResult = {
-	message: string;
-	/** Move the player to the next room after this interaction */
-	nextRoom?: boolean;
-}
-
-export type InteractionCallback = (room: Room, player: PlayerController) => InteractionResult;
-export type PropInteractionMap = Record<Capitalize<string>, InteractionCallback>;
+import {InteractionCallback, InteractionResult, PropInteractionMap, PropPositions} from "../Typings/GameTypes";
 
 export class Entity {
 
