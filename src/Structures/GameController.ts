@@ -1,4 +1,4 @@
-import {Dungeon} from "./TutorialRooms/Dungeon";
+import {TutorialRooms} from "./TutorialRooms";
 import {Class, ObjectValues} from "../Typings/Helpers";
 import {Room} from "./Room";
 import {PlayerController} from "./PlayerController";
@@ -12,13 +12,6 @@ export const THEMES = {
 	AbandonedLab: 'abandoned_lab',
 	SnowyCabin: 'snowy_cabin'
 } as const;
-
-const TUTORIAL_ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Class<Room> | null> = {
-	[THEMES.Dungeon]: Dungeon,
-	[THEMES.HauntedHouse]: null, // coming soon
-	[THEMES.AbandonedLab]: null,
-	[THEMES.SnowyCabin]: null
-}
 
 const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<Room>>> = {
 	[THEMES.Dungeon]: [
@@ -48,7 +41,7 @@ export class GameController {
 		if (!this.possibleRooms || this.possibleRooms.length === 0) {
 			throw new Error(`Invalid theme: ${theme}, no rooms available`);
 		}
-		const tutorialRoomClass = TUTORIAL_ROOMS_BY_THEME[theme];
+		const tutorialRoomClass = TutorialRooms[theme];
 		if (!tutorialRoomClass) {
 			throw new Error(`No tutorial room defined for theme: ${theme}`);
 		}
