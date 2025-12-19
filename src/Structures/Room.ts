@@ -80,17 +80,6 @@ export class Room {
 			}
 		}
 
-		// Then player inventory
-		for (const item of player.inventory.values()) {
-			if (item.name.toLowerCase() === propString) {
-				return item.interact(this, player, action);
-			}
-		}
-
-		if (propString === 'door') {
-			return this.door.interact(this, player, action);
-		}
-
 		// And finally, 404 error
 		return { message: `There is no ${propString} here to interact with.` };
 	}

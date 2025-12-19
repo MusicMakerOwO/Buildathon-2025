@@ -111,7 +111,7 @@ export class GameController {
 	 * All outputs are written to `GameController.logs`.
 	 * This function returns nothing, you are expected to read from the logs after each interaction.
 	 */
-	interact(action: Capitalize<string>, propString: string) {
+	interact(action: Capitalize<string>, target: string) {
 		if (this.gameOver) throw new Error('Game is over, no further interactions allowed.');
 		if (this.currentRoom === null) throw new Error('No current room, game is likely over');
 
@@ -121,10 +121,26 @@ export class GameController {
 			return;
 		}
 
-		this.addBlankLog();
-		this.addLog(`You ${action.toLowerCase()} the ${propString}.`);
+		if (action === 'Use') {
+			for (const item of this.player.inventory.values()) {
+				if (item.name.toLowerCase() === target.toLowerCase()) {
+					this.addBlankLog();
+					this.addLog(`You use the ${target} from your inventory.`);
+					const response = item.use(this, this.currentRoom, this.player);
+					this.addLog(response.message);
+					return;
+				}
+			}
 
-		const response = this.currentRoom.interact(this.player, action, propString);
+			// if no item found
+			this.addBlankLog();
+			this.addLog(`You do not have a ${target} in your inventory to use.`);
+		}
+
+		this.addBlankLog();
+		this.addLog(`You ${action.toLowerCase()} the ${target}.`);
+
+		const response = this.currentRoom.interact(this.player, action, target);
 		this.addLog(response.message);
 	}
 
