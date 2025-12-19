@@ -23,6 +23,7 @@ export class Room {
 	items: Map<Class<Item>, Item>;
 	props: Map<Class<Prop>, Prop>;
 	door: Door;
+	floor: FloorProp;
 	isUnlocked: boolean;
 
 	constructor(description: string, props: Class<Prop>[], items: Class<Item>[]) {
@@ -30,6 +31,7 @@ export class Room {
 		this.items = new Map(); // class -> instance
 		this.props = new Map(); // class -> instance
 		this.door = new Door(true);
+		this.floor = new FloorProp();
 
 		this.isUnlocked = true;
 
@@ -53,44 +55,25 @@ export class Room {
 			this.props.set(propInstance.constructor as Class<Prop>, propInstance);
 		}
 
-		const itemList = new Map();
 		for (const ItemClass of items) {
 			const itemInstance = new ItemClass();
-			if (!this.items.has(ItemClass)) {
-				this.items.set(ItemClass, itemInstance);
-			} else {
-				// if item already exists (multiple of same type), increase quantity
-				const existingItem = this.items.get(ItemClass)!;
-				existingItem.count += itemInstance.count;
-			}
+			this.items.set(ItemClass, itemInstance);
 		}
-		const floorInstance = new FloorProp();
-		for (const itemInstance of itemList.values()) {
-			floorInstance.addItem(itemInstance);
-		}
-		this.props.set(FloorProp, floorInstance);
 	}
 
-	/**
-	 * Handles player interaction with props in the room (items/props/inventory).
-	 */
+	/** Handles player interaction with props in the room */
 	interact(player: PlayerController, action: Capitalize<string>, propString: string): InteractionResult {
 		propString = String(propString).toLowerCase();
 
-		// Check items on floor first
-		for (const item of this.items.values()) {
-			if (item.name.toLowerCase() === propString) {
-				if (action === 'Grab') {
-					player.addItem(item);
-					this.items.delete(item.constructor as Class<Item>);
-					return { message: `You take the ${item.name} and put it in your pocket.` };
-				}
-
-				return item.interact(this, player, action);
-			}
+		if (propString === 'floor') {
+			return this.floor.interact(this, player, action);
 		}
 
-		// Next check props
+		if (propString === 'door') {
+			return this.door.interact(this, player, action);
+		}
+
+		// Check props
 		for (const prop of this.props.values()) {
 			if (prop.name.toLowerCase() === propString) {
 				return prop.interact(this, player, action);
