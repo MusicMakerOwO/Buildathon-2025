@@ -502,3 +502,81 @@ export class BloodStains extends Prop {
 		);
 	}
 }
+
+export class Fireplace extends Prop {
+	constructor() {
+		super(
+			'Fireplace',
+			'A stone fireplace with a roaring fire, providing warmth and light to the room.',
+			PropPositions.WALL,
+			undefined
+		);
+	}
+}
+
+export class Skeleton extends Prop {
+	constructor() {
+		super(
+			'Skeleton',
+			'A human skeleton slumped against the wall, its bones bleached white with age.',
+			PropPositions.WALL,
+			'You notice something clutched in the skeleton\'s bony fingers.'
+		);
+	}
+}
+
+export class ShatteredMirror extends Prop {
+	constructor() {
+		super(
+			'Shattered Mirror',
+			'A large mirror cracked into countless pieces, reflecting distorted images of the room.',
+			PropPositions.WALL,
+			'You carefully sift through the shards and find something among them.'
+		);
+	}
+}
+
+export class Banner extends Prop {
+
+	static RANDOM_DESCRIPTIONS = [
+		'A colorful banner depicting a fierce dragon in mid-flight, its scales shimmering in the light.',
+		'A regal banner adorned with intricate patterns and symbols, representing an ancient order of knights.',
+		'A worn banner featuring a majestic lion rampant, symbolizing courage and strength.',
+		'A vibrant banner showcasing a mythical phoenix rising from the ashes, embodying rebirth and renewal.',
+		'A grand banner displaying a soaring eagle clutching arrows and an olive branch, signifying power and peace.',
+		'A striking banner emblazoned with a coiled serpent, representing wisdom and cunning.',
+		'A solemn banner bearing a simple cross, symbolizing faith and devotion.',
+		'A majestic banner featuring a gallant knight on horseback, charging into battle with unwavering resolve.',
+	]
+
+	constructor() {
+		super(
+			'Banner',
+			Banner.RANDOM_DESCRIPTIONS[Math.floor(Math.random() * Banner.RANDOM_DESCRIPTIONS.length)],
+			PropPositions.WALL,
+			undefined
+		);
+	}
+}
+
+export class Microscope extends Prop {
+	constructor() {
+		super(
+			'Microscope',
+			'An old microscope with a cracked lens. It looks like it hasn\'t been used in years.',
+			PropPositions.ROOM,
+			undefined
+		);
+	}
+}
+
+export class Torch extends Prop {
+	constructor() {
+		super(
+			'Torch',
+			'A wooden torch mounted on the wall, its flame flickering and casting dancing shadows.',
+			PropPositions.WALL,
+			undefined
+		);
+	}
+}
