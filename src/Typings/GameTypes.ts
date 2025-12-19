@@ -3,6 +3,13 @@ import {PlayerController} from "../Structures/PlayerController";
 import {ObjectValues} from "./Helpers";
 import {GameController} from "../Structures/GameController";
 
+export const THEMES = {
+	Dungeon: 'dungeon',
+	HauntedHouse: 'haunted_house',
+	AbandonedLab: 'abandoned_lab',
+	SnowyCabin: 'snowy_cabin'
+} as const;
+
 export const PropPositions = {
 	/** The object is either in the middle of the room (furniture) or spans floor to ceiling (pillars) */
 	ROOM: 0,

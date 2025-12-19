@@ -1,34 +1,14 @@
 import {TutorialRooms} from "./TutorialRooms";
-import {Class, ObjectValues} from "../Typings/Helpers";
+import {ObjectValues} from "../Typings/Helpers";
 import {Room} from "./Room";
 import {PlayerController} from "./PlayerController";
-import {MessHall} from "./Rooms/Dungeon/MessHall";
-import {TortureChamber} from "./Rooms/Dungeon/TortureChamber";
-import {Item, Prop} from "./CoreStructs";
-
-export const THEMES = {
-	Dungeon: 'dungeon',
-	HauntedHouse: 'haunted_house',
-	AbandonedLab: 'abandoned_lab',
-	SnowyCabin: 'snowy_cabin'
-} as const;
-
-const ROOMS_BY_THEME: Record<ObjectValues<typeof THEMES>, Array<Class<Room>>> = {
-	[THEMES.Dungeon]: [
-		TortureChamber,
-		MessHall,
-	],
-	[THEMES.HauntedHouse]: [
-	],
-	[THEMES.AbandonedLab]: [
-	],
-	[THEMES.SnowyCabin]: [
-	]
-}
+import {Prop} from "./CoreStructs";
+import {GameEvent, THEMES} from "../Typings/GameTypes";
+import {CreateRoom} from "./RoomCreation";
 
 export class GameController {
 
-	possibleRooms: Array<Class<Room>>;
+	theme: ObjectValues<typeof THEMES>;
 	player: PlayerController;
 	logs: string[];
 	gameOver: boolean;
@@ -36,15 +16,15 @@ export class GameController {
 	currentRoom: Room | null;
 	roomCount: number;
 
+	scheduledEvents: Array<GameEvent>;
+
 	constructor(theme: ObjectValues<typeof THEMES>, roomCount: number) {
-		this.possibleRooms = ROOMS_BY_THEME[theme];
-		if (!this.possibleRooms || this.possibleRooms.length === 0) {
-			throw new Error(`Invalid theme: ${theme}, no rooms available`);
-		}
 		const tutorialRoomClass = TutorialRooms[theme];
 		if (!tutorialRoomClass) {
 			throw new Error(`No tutorial room defined for theme: ${theme}`);
 		}
+
+		this.theme = theme;
 
 		// inventory management
 		this.player = new PlayerController();
@@ -56,7 +36,7 @@ export class GameController {
 		console.log(this.currentRoom);
 
 		this.logs = [];
-
+		this.scheduledEvents = [];
 		this.gameOver = false;
 
 		this.addLog(this.currentRoom!.description);
@@ -89,14 +69,7 @@ export class GameController {
 			return;
 		}
 
-		// pick a new random room, do not repeat the same room consecutively
-		let nextRoomClass: Class<Room>;
-		do {
-			const randomIndex = Math.floor(Math.random() * this.possibleRooms.length);
-			nextRoomClass = this.possibleRooms[randomIndex];
-		} while (this.currentRoom && nextRoomClass === this.currentRoom.constructor);
-
-		this.currentRoom = new nextRoomClass();
+		this.currentRoom = CreateRoom(this.theme);
 	}
 
 	/**
@@ -141,11 +114,6 @@ export class GameController {
 	get availableActions(): Record<Capitalize<string>, Prop[]> | null {
 		if (this.gameOver || this.currentRoom === null) return null;
 		return this.currentRoom.availableActions;
-	}
-
-	get itemsOnFloor(): Item[] | null {
-		if (this.gameOver || this.currentRoom === null) return null;
-		return this.currentRoom.itemsOnFloor;
 	}
 
 	resolvePropByName(propName: string): Prop | null {

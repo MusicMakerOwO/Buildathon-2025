@@ -283,7 +283,7 @@ export class Lantern extends Prop {
 		super(
 			'Lantern',
 			Lantern.RANDOM_DESCRIPTIONS[ Math.floor(Math.random() * Lantern.RANDOM_DESCRIPTIONS.length) ],
-			PropPositions.WALL,
+			PropPositions.CEILING,
 			undefined
 		);
 	}
@@ -326,7 +326,7 @@ export class FrostedWindow extends Prop {
 	constructor() {
 		super(
 			'Frosted Window',
-			'A small window completely fogged and frozen over. No light passes through.',
+			'A small window completely fogged and frozen over on the outside. All you can see is a blur of white.',
 			PropPositions.WALL,
 			'There is something lying on the window sill.'
 		);
@@ -518,8 +518,8 @@ export class Skeleton extends Prop {
 	constructor() {
 		super(
 			'Skeleton',
-			'A human skeleton slumped against the wall, its bones bleached white with age.',
-			PropPositions.WALL,
+			'A human skeleton slumped on the floor, its bones bleached white with age.',
+			PropPositions.FLOOR,
 			'You notice something clutched in the skeleton\'s bony fingers.'
 		);
 	}

@@ -1,7 +1,8 @@
 import {ButtonInteraction, SlashCommandBuilder} from "discord.js";
-import { GameController, THEMES } from "../Structures/GameController";
+import { GameController } from "../Structures/GameController";
 import { CommandHandler } from "../Typings/HandlerTypes";
 import {ObjectValues} from "../Typings/Helpers";
+import {THEMES} from "../Typings/GameTypes";
 
 export default {
 	data: new SlashCommandBuilder()
