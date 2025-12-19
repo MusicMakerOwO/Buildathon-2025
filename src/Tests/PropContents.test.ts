@@ -5,7 +5,7 @@ import * as props from "../Structures/GameObjects";
 const key = new Key();
 
 for (const prop of Object.values(props)) {
-	const propInstance = new prop(false);
+	const propInstance = new prop();
 	if (propInstance.canHoldItems) {
 		test(`${prop.name} has functional inventory`, () => {
 			propInstance.addItem(key);

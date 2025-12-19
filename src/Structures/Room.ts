@@ -1,4 +1,3 @@
-import {Class} from "../Typings/Helpers";
 import {Key} from "./Items";
 import {PlayerController} from "./PlayerController";
 import {Item, Prop} from "./CoreStructs";
@@ -21,45 +20,41 @@ class FloorProp extends Prop {
 export class Room {
 
 	description: string;
-	items: Map<Class<Item>, Item>;
-	props: Map<Class<Prop>, Prop>;
+	props: Prop[];
 	door: Door;
 	floor: FloorProp;
 	isUnlocked: boolean;
 
-	constructor(description: string, props: Class<Prop>[], items: Class<Item>[]) {
+	constructor(description: string, props: Prop[], items: Item[]) {
 		this.description = description;
-		this.items = new Map(); // class -> instance
-		this.props = new Map(); // class -> instance
+		this.props = [];
 		this.door = new Door(true);
 		this.floor = new FloorProp();
 
+		for (const item of items) {
+			this.floor.addItem(item);
+		}
+
+		const key = new Key();
+
+		// select a random prop to add it to
+		let attempts = 3;
+		while (attempts > 0) {
+			const randIndex = Math.floor(Math.random() * props.length);
+			const selectedProp = props[randIndex];
+			// only add the key to props that are not the floor or door
+			if (selectedProp.canHoldItems) {
+				selectedProp.addItem(key);
+				break;
+			}
+			attempts--;
+		}
+		if (attempts === 0) {
+			// failed to find a suitable prop, add it to the floor instead
+			this.floor.addItem(key);
+		}
+
 		this.isUnlocked = true;
-
-		this.#InitializeProps(props, items);
-	}
-
-
-	#InitializeProps(props: Class<Prop>[], items: Class<Item>[]) {
-
-		const propInstances = props.map(PropClass => new PropClass());
-
-		let randomIndex: number;
-		do {
-			randomIndex = Math.floor(Math.random() * props.length);
-		} while (!propInstances[randomIndex].canHoldItems);
-
-		const keyItem = new Key();
-		propInstances[randomIndex].addItem(keyItem);
-
-		for (const propInstance of propInstances) {
-			this.props.set(propInstance.constructor as Class<Prop>, propInstance);
-		}
-
-		for (const ItemClass of items) {
-			const itemInstance = new ItemClass();
-			this.items.set(ItemClass, itemInstance);
-		}
 	}
 
 	/** Handles player interaction with props in the room */
@@ -120,9 +115,5 @@ export class Room {
 			}
 		}
 		return actionMap;
-	}
-
-	get itemsOnFloor(): Item[] {
-		return Array.from( this.items.values() );
 	}
 }
