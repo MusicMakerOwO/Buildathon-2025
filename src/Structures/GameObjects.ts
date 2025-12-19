@@ -1,5 +1,5 @@
-import {Prop, PropPositions} from "./CoreStructs";
-import {LockableProp} from "./LockableProp";
+import {Prop} from "./CoreStructs";
+import {PropPositions} from "../Typings/GameTypes";
 
 export class Bench extends Prop {
 	constructor() {
@@ -11,15 +11,14 @@ export class Bench extends Prop {
 		);
 	}
 }
-export class WoodStove extends LockableProp {
-	constructor(isLocked: boolean) {
-		isLocked = false;
+
+export class WoodStove extends Prop {
+	constructor() {
 		super(
 			'Wood Stove',
 			'An old-fashioned wood stove with a small oven compartment below the burners.',
 			PropPositions.ROOM,
 			'You open the door of the stove and find:',
-			isLocked
 		);
 	}
 }
@@ -59,15 +58,13 @@ export class WallMount extends Prop {
 	}
 }
 
-export class ToolBox extends LockableProp {
-	constructor(isLocked: boolean) {
-		isLocked = false;
+export class ToolBox extends Prop {
+	constructor() {
 		super(
 			'Tool Box',
 			'A metal toolbox with a stiff handle. The latch looks a bit rusty but it should open fine.',
 			PropPositions.FLOOR,
 			'You open the toolbox and find:',
-			isLocked
 		);
 	}
 }
@@ -76,7 +73,7 @@ export class Table extends Prop {
 	constructor() {
 		super(
 			'Table',
-			'A sturdy wooden table, scarred from years of use. It looks like it could support a fair amount of weight.',
+			'A simple table, scratched from years of use. It looks like it could support a fair amount of weight.',
 			PropPositions.ROOM,
 			'There is something on the table.'
 		);
@@ -85,7 +82,7 @@ export class Table extends Prop {
 
 // This is for furniture that can be interacted with, like cabinets or drawers
 // For non-interactable furniture, use StaticFurniture instead
-export class StorageFurniture extends LockableProp {
+export class StorageFurniture extends Prop {
 
 	static RANDOM_OPTIONS: [name: string, description: string][] = [
 		[
@@ -95,10 +92,6 @@ export class StorageFurniture extends LockableProp {
 		[
 			'Drawer',
 			'A small wooden drawer, slightly ajar. It seems to contain some old papers and a few miscellaneous items.'
-		],
-		[
-			'Chest',
-			'An old wooden chest bound with iron straps. It looks like it could hold something valuable inside.'
 		],
 		[
 			'Wardrobe',
@@ -118,12 +111,11 @@ export class StorageFurniture extends LockableProp {
 		],
 	]
 
-	constructor(isLocked: boolean) {
+	constructor() {
 		super(
 			... StorageFurniture.RANDOM_OPTIONS[ Math.floor(Math.random() * StorageFurniture.RANDOM_OPTIONS.length) ],
 			PropPositions.WALL,
 			'Something catches your eye while searching it:',
-			isLocked
 		);
 	}
 }
@@ -160,14 +152,13 @@ export class StaticFurniture extends Prop {
 	}
 }
 
-export class SpecimenLocker extends LockableProp {
-	constructor(isLocked: boolean) {
+export class SpecimenLocker extends Prop {
+	constructor() {
 		super(
 			'Specimen Locker',
 			'A tall, temperature-controlled locker containing labeled sample containers.',
 			PropPositions.WALL,
 			'Inside the locker, you find:',
-			isLocked
 		);
 	}
 }
@@ -205,14 +196,13 @@ export class Shackles extends Prop {
 	}
 }
 
-export class Safe extends LockableProp {
-	constructor(isLocked: boolean) {
+export class Safe extends Prop {
+	constructor() {
 		super(
 			'Safe',
 			'A heavy metal safe with little bits of rust along the edges. Its dial sticks slightly when turned but it refuses to open.',
 			PropPositions.FLOOR,
 			'The safe creaks open to reveal:',
-			isLocked
 		);
 	}
 }
@@ -269,14 +259,13 @@ export class ObservationWindow extends Prop {
 	}
 }
 
-export class Locker extends LockableProp {
-	constructor(isLocked: boolean) {
+export class Locker extends Prop {
+	constructor() {
 		super(
 			'Locker',
 			'A tall metal locker with a combination lock on the door.',
 			PropPositions.WALL,
 			'You open the locker and spot something inside.',
-			isLocked
 		);
 	}
 }
@@ -340,18 +329,6 @@ export class FrostedWindow extends Prop {
 			'A small window completely fogged and frozen over. No light passes through.',
 			PropPositions.WALL,
 			'There is something lying on the window sill.'
-		);
-	}
-}
-
-export class Dresser extends LockableProp {
-	constructor(isLocked: boolean) {
-		super(
-			'Dresser',
-			'An old wooden dresser with several drawers. The surface is dusty and worn and the drawers creak when opened.',
-			PropPositions.WALL,
-			'You open the drawers and find:',
-			isLocked
 		);
 	}
 }
@@ -460,26 +437,24 @@ export class GrandfatherClock extends Prop {
 	}
 }
 
-export class Chest extends LockableProp {
-	constructor(isLocked: boolean) {
+export class Chest extends Prop {
+	constructor() {
 		super(
 			'Chest',
 			'A sturdy wooden chest reinforced with iron bands.',
 			PropPositions.FLOOR,
 			'The chest creaks open loudly.',
-			isLocked
 		);
 	}
 }
 
-export class ChemicalCabinet extends LockableProp {
-	constructor(isLocked: boolean) {
+export class ChemicalCabinet extends Prop {
+	constructor() {
 		super(
 			'Chemical Cabinet',
 			'A heavy steel cabinet meant for storing hazardous chemicals. A greenish-yellow liquid slowly drips from a small crack in the door and sizzles as it hits the floor.',
 			PropPositions.WALL,
 			'The door screeches as you open it slowly.',
-			isLocked
 		);
 	}
 }
