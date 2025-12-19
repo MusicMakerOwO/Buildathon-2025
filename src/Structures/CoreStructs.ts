@@ -2,6 +2,7 @@ import {Log} from '../Utils/Log';
 import {PlayerController} from "./PlayerController";
 import {Room} from "./Room";
 import {ObjectValues} from "../Typings/Helpers";
+import {GameController} from "./GameController";
 
 export const PropPositions = {
 	/** The object is either in the middle of the room (furniture) or spans floor to ceiling (pillars) */
@@ -200,8 +201,8 @@ export class Item {
 	}
 
 	// Override on children
-	use(target: Room | PlayerController | Prop): InteractionResult {
-		return { message: `You can't use the ${this.name}.` };
+	use(game: GameController, room: Room, player: PlayerController): InteractionResult {
+		return { message: `You can't use this ${this.name}.` };
 	}
 
 	get display() {

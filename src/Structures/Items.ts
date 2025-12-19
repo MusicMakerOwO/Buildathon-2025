@@ -1,5 +1,7 @@
-import {InteractionResult, Item, Prop} from "./CoreStructs";
+import {InteractionResult, Item} from "./CoreStructs";
 import {Room} from "./Room";
+import {PlayerController} from "./PlayerController";
+import {GameController} from "./GameController";
 
 //////////////////////////
 // Keys and Tools
@@ -15,29 +17,30 @@ export class Key extends Item {
 // Information Items
 // These items reveal information in some way
 //////////////////////////
-export class Match extends Item {
-	constructor() {
-		super('Match', 'A small wooden matchstick. Might be handy to provide light or start a fire.', 0.02, 1);
-	}
 
-	use(target: Prop): InteractionResult {
-		// TODO: light up dark areas or ignite flammable objects
-		throw new Error("Method not implemented.");
-	}
-}
 
 ///////////////////////////
 // Special Items
 // These items have unique uses or effects
 //////////////////////////
-
 export class Journal extends Item {
 	constructor() {
 		super('Journal', 'An old leather-bound journal filled with handwritten notes and sketches.', 0.5, 1);
 	}
 
-	use(target: Room): InteractionResult {
+	use(game: GameController, room: Room, player: PlayerController): InteractionResult {
 		// TODO: stabilize the room's environment to prevent modifications
+		throw new Error("Method not implemented.");
+	}
+}
+
+export class Chalk extends Item {
+	constructor() {
+		super('Chalk', 'A piece of white chalk. Useful for marking surfaces or drawing symbols.', 0.1, 1);
+	}
+
+	use(game: GameController, room: Room, player: PlayerController): InteractionResult {
+		// TODO: mark surfaces or create symbols that have special effects
 		throw new Error("Method not implemented.");
 	}
 }
