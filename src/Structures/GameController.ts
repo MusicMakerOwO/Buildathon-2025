@@ -29,7 +29,7 @@ export class GameController {
 		// inventory management
 		this.player = new PlayerController();
 
-		this.roomCount = 3;
+		this.roomCount = roomCount;
 		this.roomsCleared = 0;
 		this.currentRoom = new tutorialRoomClass();
 
