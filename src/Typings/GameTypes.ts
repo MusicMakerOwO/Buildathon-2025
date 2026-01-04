@@ -10,6 +10,11 @@ export const THEMES = {
 	SnowyCabin: 'snowy_cabin'
 } as const;
 
+export const ROOM_EVENTS = {
+	CHALK: 1 << 0,
+	JOURNAL: 1 << 1,
+} as const;
+
 export const PropPositions = {
 	/** The object is either in the middle of the room (furniture) or spans floor to ceiling (pillars) */
 	ROOM: 0,

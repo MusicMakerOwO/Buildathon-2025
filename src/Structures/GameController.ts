@@ -29,7 +29,7 @@ export class GameController {
 		// inventory management
 		this.player = new PlayerController();
 
-		this.roomCount = roomCount;
+		this.roomCount = 3;
 		this.roomsCleared = 0;
 		this.currentRoom = new tutorialRoomClass();
 
@@ -47,7 +47,39 @@ export class GameController {
 	}
 
 	addLog(entry: string) {
-		this.logs.push(entry);
+
+		entry = entry.trim();
+
+		const logLines = entry.split('\n');
+		if (logLines.length > 1) {
+			for (const line of logLines) {
+				this.addLog(line);
+			}
+			return;
+		}
+
+		// max of 50 characters per log entry
+		const MAX_LOG_LENGTH = 50;
+
+		if (entry.length <= MAX_LOG_LENGTH) {
+			this.logs.push(entry);
+			return;
+		}
+
+		// split entry into multiple lines
+		let currentLine = '';
+		const words = entry.split(' ');
+		for (const word of words) {
+			if ((currentLine + ' ' + word).trim().length > MAX_LOG_LENGTH) {
+				this.logs.push(currentLine.trim());
+				currentLine = word;
+			} else {
+				currentLine += ' ' + word;
+			}
+		}
+		if (currentLine.trim().length > 0) {
+			this.logs.push(currentLine.trim());
+		}
 	}
 
 	canMoveToNextRoom() {
@@ -108,6 +140,20 @@ export class GameController {
 
 		const response = this.currentRoom.interact(this.player, action, target);
 		this.addLog(response.message);
+
+		if (response.nextRoom) {
+			this.moveToNextRoom();
+			this.addBlankLog();
+			if (this.currentRoom === null) {
+				this.addLog('Congratulations! You have cleared all the rooms.');
+				this.addLog('Thank you for playing');
+				this.gameOver = true;
+			} else {
+				this.addLog('[ You move to the next room ]');
+				this.addBlankLog();
+				this.addLog(this.currentRoom.description);
+			}
+		}
 	}
 
 	// bubble up RoomController methods for convenience and game boundary handling

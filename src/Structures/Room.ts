@@ -25,11 +25,14 @@ export class Room {
 	floor: FloorProp;
 	isUnlocked: boolean;
 
+	events: number;
+
 	constructor(description: string, props: Prop[], items: Item[]) {
 		this.description = description;
-		this.props = [];
+		this.props = props;
 		this.door = new Door(true);
 		this.floor = new FloorProp();
+		this.events = 0;
 
 		for (const item of items) {
 			this.floor.addItem(item);
@@ -114,6 +117,7 @@ export class Room {
 				actionMap[action] = [this.door];
 			}
 		}
+		actionMap['Examine'].push(this.floor);
 		return actionMap;
 	}
 }

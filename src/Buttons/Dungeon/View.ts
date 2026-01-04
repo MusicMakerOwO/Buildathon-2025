@@ -80,25 +80,8 @@ export default {
 			propName = null;
 		}
 
-		const logsToDisplay = game.instance.logs.slice( - (game.logOffset + LOGS_PER_PAGE), - game.logOffset || undefined);
+		const logsToDisplay = game.instance.logs.slice( - (game.logOffset + LOGS_PER_PAGE + 1), - game.logOffset || undefined);
 		const logMessage = logsToDisplay.length > 0 ? logsToDisplay.join('\n') : '[ SOMETHING WENT WRONG ]';
-
-		// getter
-		const availableActions = game.instance.availableActions;
-		if (!availableActions) {
-			// only returns null if game is over
-			throw new Error('No available actions, is the game over?');
-		}
-
-		const embed = {
-			title: 'Game Log',
-			description: `
-\`\`\`
-${logMessage}
-\`\`\`
-			`.trim(),
-			color: 0x00AAFF
-		}
 
 		const buttons = {
 			type: 1,
@@ -119,6 +102,42 @@ ${logMessage}
 				}
 			]
 		};
+
+		// check game state after processing
+		if (game.instance.gameOver) {
+			await interaction.editReply({
+				embeds: [{
+					title: 'Game Over',
+					description: `
+\`\`\`
+${logMessage}
+\`\`\`
+					`.trim(),
+					color: 0x00AAFF,
+					footer: { text: 'Made with ❤️ by @musicmaker' }
+				}],
+				components: [buttons]
+			});
+
+			return;
+		}
+
+		// getter
+		const availableActions = game.instance.availableActions;
+		if (!availableActions) {
+			// only returns null if game is over
+			throw new Error('No available actions, is the game over?');
+		}
+
+		const embed = {
+			title: 'Game Log',
+			description: `
+\`\`\`
+${logMessage}
+\`\`\`
+			`.trim(),
+			color: 0x00AAFF
+		}
 
 		const actionSelection = {
 			type: 1,
@@ -216,26 +235,9 @@ ${logMessage}
 			}
 		}
 
-		// check game state after processing
-		if (game.instance.gameOver) {
-			await interaction.editReply({
-				embeds: [{
-					title: 'Game Over',
-					description: `
-\`\`\`
-${logMessage}
-\`\`\`
-					`.trim(),
-					color: 0x00AAFF,
-					footer: { text: 'Made with ❤️ by @musicmaker' }
-				}],
-				components: [buttons]
-			});
-		} else {
-			await interaction.editReply({
-				embeds: [embed],
-				components: [buttons, actionSelection, objectSelection]
-			});
-		}
+		await interaction.editReply({
+			embeds: [embed],
+			components: [buttons, actionSelection, objectSelection]
+		});
 	}
 } as ButtonHandler;

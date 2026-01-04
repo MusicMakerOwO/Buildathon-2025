@@ -10,10 +10,6 @@ export class PlayerController extends Entity {
 		this.inventory = new Map(); // Class -> Class instance
 	}
 
-	/**
-	 * Checks if the player has an item of the specified class in their inventory.
-	 * Returns the quantity if found, otherwise returns false.
-	 */
 	hasItem(itemClass: Class<Item>) {
 		if (this.inventory.has(itemClass)) {
 			return this.inventory.get(itemClass)!.count;
@@ -21,11 +17,6 @@ export class PlayerController extends Entity {
 		return false;
 	}
 
-	/**
-	 * Adds an item to the player's inventory.
-	 * If the item type already exists, increments the count.
-	 * Returns the new count of the item type.
-	 */
 	addItem(item: Item) {
 		if (this.inventory.has(item.constructor as Class<Item>)) {
 			this.inventory.get(item.constructor as Class<Item>)!.count += item.count;
@@ -35,11 +26,6 @@ export class PlayerController extends Entity {
 		return this.inventory.get(item.constructor as Class<Item>)!.count;
 	}
 
-	/**
-	 * Removes a specified amount of an item type from the player's inventory.
-	 * Throws an error if not enough items are present.
-	 * Returns the new count of the item type after removal.
-	 */
 	removeItem(itemClass: Class<Item>, amount = 1) {
 		amount = Number(amount) || 1;
 		if (amount <= 0) {
